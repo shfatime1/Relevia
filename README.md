@@ -36,3 +36,17 @@ Use `.venv/bin/python` on macOS/Linux. The first search downloads the pinned [mu
 BM25 uses case-folded Unicode word tokens and returns only products with matching terms. Semantic search uses a FAISS inner-product index over normalized vectors, so its scores are cosine similarities. Scores from the two methods have different scales and should not be compared directly. Azerbaijani queries work without a translation service, although the predominantly English catalog, multilingual model coverage, and absence of product-specific training can produce weak cross-language matches; BM25 needs shared words or model names.
 
 The model is cached under `.cache/huggingface` and vectors, FAISS index, and ordered product-ID manifest under `.cache/text_search`; `.cache/` is Git-ignored. A dataset hash, model revision, text configuration, and cache-file checksums control reuse. Changing these rebuilds the embeddings and index automatically. Existing Phase 1 artifacts are read only. The CLI setup time includes any model download and index build, and its first semantic query also loads the model; warm-query timing is reported by the validation command.
+
+## Phase 2B: visual search
+
+After installing the updated requirements, search by an existing product image or an external image:
+
+```powershell
+.venv\Scripts\python -X utf8 backend\image_search.py data\images\B06XYHDX83.webp --top 5
+.venv\Scripts\python -X utf8 backend\image_search.py C:\path\to\photo.jpg
+.venv\Scripts\python -X utf8 -m backend.validate_image_search
+```
+
+The first run downloads the pinned [CLIP ViT-B/32 model](https://huggingface.co/openai/clip-vit-base-patch32) and computes normalized 512-dimensional image vectors in batches. CUDA is used when available in the installed PyTorch build; otherwise inference runs on CPU. The separate `.cache/image_search` directory contains the vectors, ordered product-ID and image-hash manifest, and FAISS inner-product index. Unchanged image vectors are reused; changed images are re-encoded and a changed index is rebuilt. Model/configuration changes invalidate the vector cache. The model and indexes are Git-ignored.
+
+Searching a catalog image excludes that product's resolved image path from the results. An external file, including a copy of a catalog image, is treated as an external query. Similarity is visual cosine similarity, not a guarantee that items have matching specifications or functions; results need task-specific evaluation. Phase 1 data and the Phase 2A text-search index are not modified.
