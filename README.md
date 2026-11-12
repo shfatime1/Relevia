@@ -74,3 +74,14 @@ Reproduce the model comparison with `python -m backend.compare_sentiment` and th
 The CLI recommends up to five products and accepts `--top` to change the maximum. It reuses the Phase 2 E5 and CLIP indexes and Phase 3 product sentiment summaries; the existing search loaders rebuild stale indexes as described above. Candidates must share the selected product's main category. Products in the same original source category are ranked first; if there are too few, other products in the same main category fill the remaining slots. Within each tier, matching finer source subcategories receive a small bonus, and the score combines text cosine similarity (55%), image cosine similarity (30%), category relevance (15%), and a small adjustment based on predicted sentiment. Scores are ranking scores, not probabilities or pure cosine similarities; a fallback result can have a higher score than an original-category result because the category tier takes priority. The result includes the individual similarities and reasons.
 
 Small main categories can produce fewer than five matches. Broad categories and image similarity can still group products with different functions or specifications, particularly when using the main-category fallback, so recommendations are not a guarantee of compatibility. Sentiment is based on only 5–10 selected reviews per product and a model with the limitations described above. See `reports/recommendation/` for real examples and validation details.
+
+## Phase 4B: unified search
+
+```powershell
+.venv\Scripts\python -X utf8 -m backend.unified_search --text "simsiz bluetooth qulaqlıq" --category "Headphones & Earbuds" --max-price 60
+.venv\Scripts\python -X utf8 -m backend.unified_search --image data\images\B0001G6U4S.webp --min-price 50 --max-price 200
+```
+
+Choose exactly one of `--text` or `--image`. Optional `--category` matches an entire main or original category, case-insensitively; `--min-price` and `--max-price` are inclusive, and `--top` defaults to five. Filters are applied to the full ranked catalog before limiting results. Text search combines BM25 and E5 with equal-weight reciprocal-rank fusion; keyword-unmatched products can still rank through E5. The displayed text score is a relative fusion score, while the image score is CLIP cosine similarity, so scores across modes or queries are not comparable. The CLI reuses the existing indexes and caches. Image searches exclude the query product when its catalog image path is used, as in Phase 2B.
+
+Search quality depends on the English catalog and pretrained models; Azerbaijani queries, specialized terms and image matches can return unrelated products. Categories and prices are metadata filters, not compatibility checks. See `reports/search/` for real examples and limitations.

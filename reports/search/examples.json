@@ -1,0 +1,579 @@
+[
+  {
+    "case": "exact_english",
+    "mode": "text",
+    "query": "Canon PowerShot",
+    "filters": {},
+    "results": [
+      {
+        "product_id": "B005UVRYFS",
+        "title": "Canon PowerShot A3100IS 12.1 MP Digital Camera with 4x Optical Image Stabilized Zoom and 2.7-Inch LCD (Red)",
+        "price": 224.9,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B005UVRYFS.webp",
+        "relevance_score": 1.0,
+        "ranking_reasons": [
+          "E5 semantic rank 1; cosine 0.9057",
+          "BM25 keyword rank 1"
+        ]
+      },
+      {
+        "product_id": "B001SER460",
+        "title": "Canon PowerShot D10 12.1 MP Waterproof Digital Camera with 3x Optical Image Stabilized Zoom and 2.5-Inch LCD (OLD MODEL)",
+        "price": 149.95,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B001SER460.webp",
+        "relevance_score": 0.9838709677419355,
+        "ranking_reasons": [
+          "E5 semantic rank 2; cosine 0.9038",
+          "BM25 keyword rank 2"
+        ]
+      },
+      {
+        "product_id": "B00PG6M934",
+        "title": "Canon PowerShot G16 12.1 MP CMOS Digital Camera with 5x Optical Zoom and 1080p Full-HD Video Wi-Fi Enabled",
+        "price": 389.99,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B00PG6M934.webp",
+        "relevance_score": 0.9533577533577533,
+        "ranking_reasons": [
+          "E5 semantic rank 3; cosine 0.8986",
+          "BM25 keyword rank 5"
+        ]
+      },
+      {
+        "product_id": "B00T6P7LLQ",
+        "title": "Canon PowerShot SX410 is (Red)",
+        "price": 249.95,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B00T6P7LLQ.webp",
+        "relevance_score": 0.953125,
+        "ranking_reasons": [
+          "E5 semantic rank 4; cosine 0.8984",
+          "BM25 keyword rank 4"
+        ]
+      },
+      {
+        "product_id": "B0001G6U4S",
+        "title": "Canon PowerShot A75 3.2MP Digital Camera with 3X Optical Zoom (OLD MODEL)",
+        "price": 119.99,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B0001G6U4S.webp",
+        "relevance_score": 0.9462481962481962,
+        "ranking_reasons": [
+          "E5 semantic rank 6; cosine 0.8865",
+          "BM25 keyword rank 3"
+        ]
+      }
+    ]
+  },
+  {
+    "case": "natural_english",
+    "mode": "text",
+    "query": "wireless headphones for listening to music",
+    "filters": {},
+    "results": [
+      {
+        "product_id": "B0BNC1QBH6",
+        "title": "Sony Wireless Headphones WH-CH510: Wireless Bluetooth On-Ear Headset with Mic for phone-call, Blue",
+        "price": 59.99,
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "image_path": "data/images/B0BNC1QBH6.webp",
+        "relevance_score": 0.9841269841269842,
+        "ranking_reasons": [
+          "E5 semantic rank 1; cosine 0.8900",
+          "BM25 keyword rank 3"
+        ]
+      },
+      {
+        "product_id": "B07VQFHHDF",
+        "title": "August EP636 Bluetooth Headphones - Wireless On-Ear Headphones with NFC/Headset Microphone - Silver",
+        "price": 45.95,
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "image_path": "data/images/B07VQFHHDF.webp",
+        "relevance_score": 0.961166253101737,
+        "ranking_reasons": [
+          "E5 semantic rank 2; cosine 0.8780",
+          "BM25 keyword rank 5"
+        ]
+      },
+      {
+        "product_id": "B08VNLSM15",
+        "title": "PRTUKYT 6S Wireless Bluetooth Headphones Over Ear",
+        "price": 19.99,
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "image_path": "data/images/B08VNLSM15.webp",
+        "relevance_score": 0.931786380597015,
+        "ranking_reasons": [
+          "E5 semantic rank 7; cosine 0.8687",
+          "BM25 keyword rank 4"
+        ]
+      },
+      {
+        "product_id": "B07WF9SLQP",
+        "title": "Phiaton BT 390 on Ear Hi-Fi Stereo Wireless Bluetooth Headphones, Foldable, Noise Isolation, EverPlay-X Wireless Headset, 30 Hours Play Time, with Deep Bass Stereo and Mic, Black",
+        "price": 39.99,
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "image_path": "data/images/B07WF9SLQP.webp",
+        "relevance_score": 0.910650623885918,
+        "ranking_reasons": [
+          "E5 semantic rank 8; cosine 0.8685",
+          "BM25 keyword rank 6"
+        ]
+      },
+      {
+        "product_id": "B0B5Y69NPM",
+        "title": "Mojawa Wireless Bone Conduction Headphones - Bluetooth Open-Ear Headphones w/Mic,Premium Sound Quality,34.5g, Noise Cancellation, 8h Long Battery Life, IP67 Waterproof, Headset for Running/Cycling",
+        "price": 129.95,
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "image_path": "data/images/B0B5Y69NPM.webp",
+        "relevance_score": 0.9077380952380952,
+        "ranking_reasons": [
+          "E5 semantic rank 3; cosine 0.8767",
+          "BM25 keyword rank 12"
+        ]
+      }
+    ]
+  },
+  {
+    "case": "azerbaijani_earbuds",
+    "mode": "text",
+    "query": "simsiz bluetooth qulaqlıq",
+    "filters": {},
+    "results": [
+      {
+        "product_id": "B016YVHURO",
+        "title": "Tenergy Wireless Bluetooth Beanie Hat with Detachable Stereo Speakers & Microphone, Fleece-Lined Unisex Music Beanie for Outdoor Sports, Basic Knit (Black)",
+        "price": 24.95,
+        "category": "Speakers & Home Audio",
+        "original_category": "Portable Speakers & Docks",
+        "image_path": "data/images/B016YVHURO.webp",
+        "relevance_score": 0.8972528661042612,
+        "ranking_reasons": [
+          "E5 semantic rank 9; cosine 0.8072",
+          "BM25 keyword rank 7"
+        ]
+      },
+      {
+        "product_id": "B00X69BYGG",
+        "title": "iHome iKN105BC Dual Charging Bluetooth Stereo Alarm Clock Radio/Speakerphone with NFC, Removable Power",
+        "price": 49.99,
+        "category": "Speakers & Home Audio",
+        "original_category": "Compact Radios & Stereos",
+        "image_path": "data/images/B00X69BYGG.webp",
+        "relevance_score": 0.8531885758998435,
+        "ranking_reasons": [
+          "E5 semantic rank 12; cosine 0.8061",
+          "BM25 keyword rank 11"
+        ]
+      },
+      {
+        "product_id": "B07VQFHHDF",
+        "title": "August EP636 Bluetooth Headphones - Wireless On-Ear Headphones with NFC/Headset Microphone - Silver",
+        "price": 45.95,
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "image_path": "data/images/B07VQFHHDF.webp",
+        "relevance_score": 0.8465909090909092,
+        "ranking_reasons": [
+          "E5 semantic rank 1; cosine 0.8114",
+          "BM25 keyword rank 28"
+        ]
+      },
+      {
+        "product_id": "B0BHSPDZ34",
+        "title": "RIENOK Portable Bluetooth Speaker 30W Dual Pairing True Wireless Stereo HD Sound IPX7 Waterproof Outdoor Sport Shower Wireless Speaker Bluetooth 5.3 for Home Party",
+        "price": 35.99,
+        "category": "Speakers & Home Audio",
+        "original_category": "Portable Speakers & Docks",
+        "image_path": "data/images/B0BHSPDZ34.webp",
+        "relevance_score": 0.7953514739229024,
+        "ranking_reasons": [
+          "E5 semantic rank 38; cosine 0.8009",
+          "BM25 keyword rank 3"
+        ]
+      },
+      {
+        "product_id": "B078P96YNV",
+        "title": "OhO Bluetooth Sunglasses,Open Ear Style Smart Glasses to Listen Music and Make Phone Calls with Polarized UV400 Safety Lens",
+        "price": 49.99,
+        "category": "Wearable Technology",
+        "original_category": "Glasses",
+        "image_path": "data/images/B078P96YNV.webp",
+        "relevance_score": 0.7626191592436318,
+        "ranking_reasons": [
+          "E5 semantic rank 21; cosine 0.8036",
+          "BM25 keyword rank 19"
+        ]
+      }
+    ]
+  },
+  {
+    "case": "azerbaijani_camera",
+    "mode": "text",
+    "query": "şəkil çəkmək üçün rəqəmsal kamera",
+    "filters": {},
+    "results": [
+      {
+        "product_id": "B0BN13GCLC",
+        "title": "Barchrons Instant Print Digital Kids Camera 1080P Rechargeable Kids Camera Video Camera with 32G SD Card for 6-12 Years Old Birthday Gift",
+        "price": 69.99,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B0BN13GCLC.webp",
+        "relevance_score": 0.5,
+        "ranking_reasons": [
+          "E5 semantic rank 1; cosine 0.8210",
+          "No BM25 token match"
+        ]
+      },
+      {
+        "product_id": "B00PG6M934",
+        "title": "Canon PowerShot G16 12.1 MP CMOS Digital Camera with 5x Optical Zoom and 1080p Full-HD Video Wi-Fi Enabled",
+        "price": 389.99,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B00PG6M934.webp",
+        "relevance_score": 0.49193548387096775,
+        "ranking_reasons": [
+          "E5 semantic rank 2; cosine 0.8198",
+          "No BM25 token match"
+        ]
+      },
+      {
+        "product_id": "B08P8R342L",
+        "title": "Sony ZV-1 Digital Camera for Content Creators, Vlogging and YouTube with Flip Screen, Built-in Microphone, 4K HDR Video, Touchscreen Display, Live Video Streaming, Webcam & Content Creator Kit",
+        "price": 1015.57,
+        "category": "Cameras & Photography",
+        "original_category": "Video",
+        "image_path": "data/images/B08P8R342L.webp",
+        "relevance_score": 0.4841269841269841,
+        "ranking_reasons": [
+          "E5 semantic rank 3; cosine 0.8175",
+          "No BM25 token match"
+        ]
+      },
+      {
+        "product_id": "B07RYJN1FC",
+        "title": "VTech Kidizoom Duo 5.0 Deluxe Digital Selfie Camera with MP3 Player and Headphones, Pink",
+        "price": 71.95,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B07RYJN1FC.webp",
+        "relevance_score": 0.4765625,
+        "ranking_reasons": [
+          "E5 semantic rank 4; cosine 0.8165",
+          "No BM25 token match"
+        ]
+      },
+      {
+        "product_id": "B003LL3CLY",
+        "title": "Panasonic Lumix DMC-FH20 14.1 MP Digital Camera with 8x Optical Image Stabilized Zoom and 2.7-Inch LCD (Violet) (OLD MODEL)",
+        "price": 89.99,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B003LL3CLY.webp",
+        "relevance_score": 0.46923076923076923,
+        "ranking_reasons": [
+          "E5 semantic rank 5; cosine 0.8165",
+          "No BM25 token match"
+        ]
+      }
+    ]
+  },
+  {
+    "case": "text_filters",
+    "mode": "text",
+    "query": "wireless headphones",
+    "filters": {
+      "category": "headphones & earbuds",
+      "min_price": 20,
+      "max_price": 60
+    },
+    "results": [
+      {
+        "product_id": "B0BNC1QBH6",
+        "title": "Sony Wireless Headphones WH-CH510: Wireless Bluetooth On-Ear Headset with Mic for phone-call, Blue",
+        "price": 59.99,
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "image_path": "data/images/B0BNC1QBH6.webp",
+        "relevance_score": 0.9841269841269842,
+        "ranking_reasons": [
+          "E5 semantic rank 1; cosine 0.8927",
+          "BM25 keyword rank 3"
+        ]
+      },
+      {
+        "product_id": "B07VQFHHDF",
+        "title": "August EP636 Bluetooth Headphones - Wireless On-Ear Headphones with NFC/Headset Microphone - Silver",
+        "price": 45.95,
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "image_path": "data/images/B07VQFHHDF.webp",
+        "relevance_score": 0.953125,
+        "ranking_reasons": [
+          "E5 semantic rank 4; cosine 0.8713",
+          "BM25 keyword rank 4"
+        ]
+      },
+      {
+        "product_id": "B0BD7L35RP",
+        "title": "YouthWhisper Bone Conduction Headphones - Bluetooth Running Earphones Open Ear Wireless Headset with Mic, Sweat Resistant Conducting Headphone for Workout Hiking Fitness Walking (Black)",
+        "price": 39.99,
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "image_path": "data/images/B0BD7L35RP.webp",
+        "relevance_score": 0.9276497695852534,
+        "ranking_reasons": [
+          "E5 semantic rank 2; cosine 0.8737",
+          "BM25 keyword rank 10"
+        ]
+      },
+      {
+        "product_id": "B078P1WK59",
+        "title": "JBL T450BT Wireless On-Ear Headphones with Built-in Remote and Microphone (Black)",
+        "price": 34.95,
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "image_path": "data/images/B078P1WK59.webp",
+        "relevance_score": 0.9040976460331299,
+        "ranking_reasons": [
+          "E5 semantic rank 14; cosine 0.8651",
+          "BM25 keyword rank 2"
+        ]
+      },
+      {
+        "product_id": "B0C4FBB8LN",
+        "title": "Wireless Earbud, Bluetooth 5.3 Headphones Sport Wireless Bluetooth Earphones in Ear Noise Cancelling Earbud with Mic Deep Bass, Earhooks Ear Buds IP7 Waterproof 48H Headset for Running Gym[2022 New]",
+        "price": 35.99,
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "image_path": "data/images/B0C4FBB8LN.webp",
+        "relevance_score": 0.9019352033050663,
+        "ranking_reasons": [
+          "E5 semantic rank 3; cosine 0.8725",
+          "BM25 keyword rank 13"
+        ]
+      }
+    ]
+  },
+  {
+    "case": "image_camera",
+    "mode": "image",
+    "query": "data/images/B0001G6U4S.webp",
+    "filters": {},
+    "results": [
+      {
+        "product_id": "B01DSYP0V8",
+        "title": "Canon EOS 7D 18 MP CMOS Digital SLR Camera with 18-135mm f/3.5-5.6 IS UD Lens (discontinued by manufacturer)",
+        "price": 684.0,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B01DSYP0V8.webp",
+        "relevance_score": 0.8901351094245911,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8901"
+        ]
+      },
+      {
+        "product_id": "B077PSDB4X",
+        "title": "Sony Alpha a6000 Mirrorless Digital Camera with 16-50 mm Lens 24.3MP (Silver)",
+        "price": 498.0,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B077PSDB4X.webp",
+        "relevance_score": 0.8872705101966858,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8873"
+        ]
+      },
+      {
+        "product_id": "B08CNW1LW2",
+        "title": "Canon EOS R5 Full-Frame Mirrorless Camera w/ RF24-105mm F4 L is USM Lens Kit - 8K Video, 45 Megapixel Full-Frame CMOS Sensor, DIGIC X Image Processor, Up to 12 fps Mechanical Shutter (Body + Lens)",
+        "price": 4499.0,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B08CNW1LW2.webp",
+        "relevance_score": 0.8862353563308716,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8862"
+        ]
+      },
+      {
+        "product_id": "B00PG6M934",
+        "title": "Canon PowerShot G16 12.1 MP CMOS Digital Camera with 5x Optical Zoom and 1080p Full-HD Video Wi-Fi Enabled",
+        "price": 389.99,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B00PG6M934.webp",
+        "relevance_score": 0.8844844102859497,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8845"
+        ]
+      },
+      {
+        "product_id": "B00HQDBLDO",
+        "title": "Nikon Coolpix L330 Digital Camera (Black)",
+        "price": 169.99,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B00HQDBLDO.webp",
+        "relevance_score": 0.8761765360832214,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8762"
+        ]
+      }
+    ]
+  },
+  {
+    "case": "image_router",
+    "mode": "image",
+    "query": "data/images/B00008SCFL.webp",
+    "filters": {},
+    "results": [
+      {
+        "product_id": "B00BYRPPAS",
+        "title": "D-Link Wireless AC 1200 Mbps Home Cloud App-Enabled Dual-Band Gigabit Router (DIR-850L)",
+        "price": 36.9,
+        "category": "Networking",
+        "original_category": "Networking Products",
+        "image_path": "data/images/B00BYRPPAS.webp",
+        "relevance_score": 0.8826264142990112,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8826"
+        ]
+      },
+      {
+        "product_id": "B07PKRTZLR",
+        "title": "Soul Inscriptions Press Belkin AC1900 Wi-Fi Dual-Band AC+ Gigabit Router (F9K1124)",
+        "price": 44.95,
+        "category": "Networking",
+        "original_category": "Networking Products",
+        "image_path": "data/images/B07PKRTZLR.webp",
+        "relevance_score": 0.8786501884460449,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8787"
+        ]
+      },
+      {
+        "product_id": "B00DIOALWC",
+        "title": "Plantronics BackBeat GO 2 Bluetooth Wireless Stereo Earbuds - Retail Packaging - White",
+        "price": 17.99,
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "image_path": "data/images/B00DIOALWC.webp",
+        "relevance_score": 0.8717261552810669,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8717"
+        ]
+      },
+      {
+        "product_id": "B076B6HGNQ",
+        "title": "WD 4TB My Book Desktop External Hard Drive - USB 3.0 - WDBFJK0040HBK-NESN,Black",
+        "price": 137.94,
+        "category": "Data Storage",
+        "original_category": "Data Storage",
+        "image_path": "data/images/B076B6HGNQ.webp",
+        "relevance_score": 0.8712933659553528,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8713"
+        ]
+      },
+      {
+        "product_id": "B005DP9SQO",
+        "title": "WD My Passport for Mac 500 GB USB 2.0 External Hard Drive - WDBL1D5000ABK-NESN",
+        "price": 120.0,
+        "category": "Data Storage",
+        "original_category": "Data Storage",
+        "image_path": "data/images/B005DP9SQO.webp",
+        "relevance_score": 0.8570871353149414,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8571"
+        ]
+      }
+    ]
+  },
+  {
+    "case": "image_filters",
+    "mode": "image",
+    "query": "data/images/B0001G6U4S.webp",
+    "filters": {
+      "category": "cameras & photography",
+      "min_price": 50,
+      "max_price": 200
+    },
+    "results": [
+      {
+        "product_id": "B00HQDBLDO",
+        "title": "Nikon Coolpix L330 Digital Camera (Black)",
+        "price": 169.99,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B00HQDBLDO.webp",
+        "relevance_score": 0.8761765360832214,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8762"
+        ]
+      },
+      {
+        "product_id": "B004TJ6N90",
+        "title": "Nikon COOLPIX P500 12.1 CMOS Digital Camera with 36x NIKKOR Wide-Angle Optical Zoom Lens and Full HD 1080p Video (Black)",
+        "price": 149.99,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B004TJ6N90.webp",
+        "relevance_score": 0.8576086759567261,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8576"
+        ]
+      },
+      {
+        "product_id": "B00A4QXIRM",
+        "title": "Fujifilm FinePix SL300 14 MP Digital Camera with 30x Optical Zoom (Black) (OLD MODEL)",
+        "price": 159.99,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B00A4QXIRM.webp",
+        "relevance_score": 0.8383827209472656,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8384"
+        ]
+      },
+      {
+        "product_id": "B0035JD0DW",
+        "title": "Fujifilm FinePix S1800 12.2 MP Digital Camera with 18x Wide Angle Optical Dual Image Stabilized Zoom and 3-Inch LCD",
+        "price": 65.0,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B0035JD0DW.webp",
+        "relevance_score": 0.8322529196739197,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8323"
+        ]
+      },
+      {
+        "product_id": "B00ATM1NAU",
+        "title": "Fujifilm FinePix S8200 16.2MP Digital Camera with 3-Inch LCD (Black) (OLD MODEL)",
+        "price": 198.8,
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "image_path": "data/images/B00ATM1NAU.webp",
+        "relevance_score": 0.828539252281189,
+        "ranking_reasons": [
+          "CLIP image cosine similarity 0.8285"
+        ]
+      }
+    ]
+  }
+]
