@@ -85,3 +85,26 @@ Small main categories can produce fewer than five matches. Broad categories and 
 Choose exactly one of `--text` or `--image`. Optional `--category` matches an entire main or original category, case-insensitively; `--min-price` and `--max-price` are inclusive, and `--top` defaults to five. Filters are applied to the full ranked catalog before limiting results. Text search combines BM25 and E5 with equal-weight reciprocal-rank fusion; keyword-unmatched products can still rank through E5. The displayed text score is a relative fusion score, while the image score is CLIP cosine similarity, so scores across modes or queries are not comparable. The CLI reuses the existing indexes and caches. Image searches exclude the query product when its catalog image path is used, as in Phase 2B.
 
 Search quality depends on the English catalog and pretrained models; Azerbaijani queries, specialized terms and image matches can return unrelated products. Categories and prices are metadata filters, not compatibility checks. See `reports/search/` for real examples and limitations.
+
+## Phase 5A: local API
+
+Install the updated requirements, then start the local server from the repository root:
+
+```powershell
+.venv\Scripts\python -m uvicorn backend.api:app --host 127.0.0.1 --port 8000
+```
+
+Open `http://127.0.0.1:8000/docs` for interactive OpenAPI documentation, or `/redoc` for the reference. Startup loads the existing data, indexes, E5 model and CLIP model once per server process; missing or stale caches follow the existing Phase 2 rebuild behavior. Images are available at the relative URLs returned in `image_url` under `/images/`.
+
+- `GET /api/categories` lists main and original categories.
+- `GET /api/products?page=1&page_size=20&category=Digital%20Cameras&min_price=50&max_price=200` lists products. Category and price filters are optional; price bounds are inclusive. Categories match a complete main or original name without regard to case.
+- `GET /api/products/{product_id}` returns a product's description, specifications, price, ratings and image URL.
+- `GET /api/search/text?q=wireless%20headphones` performs hybrid search. Optional `category`, `min_price`, `max_price` and `limit` query parameters also apply to `POST /api/search/image`, which accepts a multipart `file` field containing a decodable image of at most 10 MiB. Uploaded copies are external images, so a matching catalog product may appear in results.
+- `GET /api/products/{product_id}/recommendations` returns up to five related products.
+- `GET /api/products/{product_id}/sentiment?sentiment=positive` returns the product summary and original review text joined to the final model's predictions. The optional sentiment filter accepts `positive`, `neutral` or `negative`; the summary remains unfiltered. Review timestamps are source Unix milliseconds.
+
+Missing products return 404, invalid parameters or images return 422, and an image larger than 10 MiB returns 413. Empty matches return an empty list. This local API has no authentication; search, recommendation and sentiment limitations described above still apply. To run the essential endpoint checks against the existing local data and caches:
+
+```powershell
+.venv\Scripts\python -X utf8 -m unittest discover -s tests -v
+```

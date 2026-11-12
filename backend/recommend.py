@@ -11,10 +11,10 @@ from backend.search import ProductSearch, ROOT
 
 
 class Recommender:
-    def __init__(self):
+    def __init__(self, text_search=None, image_search=None):
         # These loaders validate their caches and rebuild them only when necessary.
-        self.text = ProductSearch()
-        self.image = ImageSearch()
+        self.text = text_search if text_search is not None else ProductSearch()
+        self.image = image_search if image_search is not None else ImageSearch()
         self.products = self.text.products
         self.ids = self.text.ids
         if self.ids != [p['parent_asin'] for p in self.image.products]:
