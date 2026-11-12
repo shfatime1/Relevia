@@ -1,0 +1,17 @@
+# Phase 4A recommendation evaluation
+
+`examples.json` contains actual CLI-equivalent results for five seeds from different source categories and one sparse-category example. They can be reproduced with `python -m backend.recommend PRODUCT_ID` using the same product data, Phase 2 caches and Phase 3 summaries. The examples are illustrative; there are no independent relevance judgments or user interaction data, so they do not measure recommendation precision or user satisfaction.
+
+The five original-category examples are a Canon PowerShot camera, Skullcandy earbuds, a Western Digital external hard drive, a Netgear router, and a TCL television. Their first matches respectively are another Canon PowerShot camera, MAXROCK earbuds, a WD My Book external drive, a D-Link router, and a Samsung television. The TV recommendations include different screen sizes and brands; similarity does not establish specification compatibility. The KByte fingerprint reader has no other product in its original category, so its five results come from the broader Security & Surveillance category: two window and door alarms followed by three security cameras. Those share the main category but are not functional substitutes for a fingerprint reader; this demonstrates an important limitation of the fallback.
+
+## Method
+
+Candidates must have the same main category as the seed. Products in the same original category are ranked first, then other products in the main category fill any remaining slots. Within each tier, results are sorted by score. Category relevance is 1.0 for a matching fourth source taxonomy level, 0.8 for a matching original category, and 0.4 for a main-category fallback. The ranking score is `0.55 * text cosine + 0.30 * image cosine + 0.15 * category relevance + sentiment adjustment`. The adjustment is `0.02 * (positive_count - negative_count) / (review_count + 5)`; the denominator shrinks the impact of the small review sample. With the current 5–10 reviews per product its absolute value is at most 0.0134. Scores are ranking signals, not probabilities or pure cosine similarities. An original-category result is always ranked ahead of a fallback, even if its score is lower. Weights are heuristic and have not been tuned against relevance labels.
+
+Sentiment uses the final Phase 3 product-review model's predictions. Its neutral-class precision is low, it was trained on clothing reviews, and each product summary represents only the selected 5–10 reviews. It is a small adjustment, not a measure of overall product quality. Source categories can be broad or imperfect; a shared category and visual resemblance cannot guarantee interchangeable functions or compatibility.
+
+## Checks
+
+All 1,000 products were queried. Results excluded their seeds, contained unique IDs and matching catalog metadata, stayed in the same main category, prioritized all available original-category matches, and were sorted by score within each tier. The existing E5 and CLIP caches were both reused; no embeddings were recomputed.
+
+All 1,000 products returned five results; zero returned fewer than five, including zero that returned no results. The fallback was used for 48 seeds. This improves coverage from the previous strict-source-category rule, under which 952 products returned five results and 12 returned none. Coverage is not evidence that fallback results are functionally relevant; main categories can contain very different product types.

@@ -1,0 +1,572 @@
+[
+  {
+    "seed": {
+      "parent_asin": "B0001G6U4S",
+      "title": "Canon PowerShot A75 3.2MP Digital Camera with 3X Optical Zoom (OLD MODEL)",
+      "main_category": "Cameras & Photography",
+      "original_category": "Digital Cameras"
+    },
+    "recommendations": [
+      {
+        "product_id": "B005UVRYFS",
+        "title": "Canon PowerShot A3100IS 12.1 MP Digital Camera with 4x Optical Image Stabilized Zoom and 2.7-Inch LCD (Red)",
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "price": 224.9,
+        "image_path": "data/images/B005UVRYFS.webp",
+        "similarity_score": 0.928434,
+        "text_similarity": 0.927849,
+        "visual_similarity": 0.860389,
+        "sentiment_adjustment": 0.01,
+        "reasons": [
+          "Same source subcategory: Point & Shoot Digital Cameras",
+          "Text similarity 0.928; visual similarity 0.860",
+          "Review sentiment adjustment +0.0100 from 9 reviews"
+        ]
+      },
+      {
+        "product_id": "B00PG6M934",
+        "title": "Canon PowerShot G16 12.1 MP CMOS Digital Camera with 5x Optical Zoom and 1080p Full-HD Video Wi-Fi Enabled",
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "price": 389.99,
+        "image_path": "data/images/B00PG6M934.webp",
+        "similarity_score": 0.923124,
+        "text_similarity": 0.906263,
+        "visual_similarity": 0.884484,
+        "sentiment_adjustment": 0.009333,
+        "reasons": [
+          "Same source subcategory: Point & Shoot Digital Cameras",
+          "Text similarity 0.906; visual similarity 0.884",
+          "Review sentiment adjustment +0.0093 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B07FZ1Z3C2",
+        "title": "Canon Cameras US Point and Shoot Digital Camera with 3.0\" LCD, Silver (2956C001)",
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "price": 570.0,
+        "image_path": "data/images/B07FZ1Z3C2.webp",
+        "similarity_score": 0.920965,
+        "text_similarity": 0.908827,
+        "visual_similarity": 0.863701,
+        "sentiment_adjustment": 0.012,
+        "reasons": [
+          "Same source subcategory: Point & Shoot Digital Cameras",
+          "Text similarity 0.909; visual similarity 0.864",
+          "Review sentiment adjustment +0.0120 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B01A756PA6",
+        "title": "Canon PowerShot ELPH 180 Digital Camera w/Image Stabilization and Smart AUTO Mode (Red)",
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "price": 379.95,
+        "image_path": "data/images/B01A756PA6.webp",
+        "similarity_score": 0.914958,
+        "text_similarity": 0.913659,
+        "visual_similarity": 0.848153,
+        "sentiment_adjustment": 0.008,
+        "reasons": [
+          "Same source subcategory: Point & Shoot Digital Cameras",
+          "Text similarity 0.914; visual similarity 0.848",
+          "Review sentiment adjustment +0.0080 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B001SER460",
+        "title": "Canon PowerShot D10 12.1 MP Waterproof Digital Camera with 3x Optical Image Stabilized Zoom and 2.5-Inch LCD (OLD MODEL)",
+        "category": "Cameras & Photography",
+        "original_category": "Digital Cameras",
+        "price": 149.95,
+        "image_path": "data/images/B001SER460.webp",
+        "similarity_score": 0.907693,
+        "text_similarity": 0.916983,
+        "visual_similarity": 0.808953,
+        "sentiment_adjustment": 0.010667,
+        "reasons": [
+          "Same source subcategory: Point & Shoot Digital Cameras",
+          "Text similarity 0.917; visual similarity 0.809",
+          "Review sentiment adjustment +0.0107 from 10 reviews"
+        ]
+      }
+    ]
+  },
+  {
+    "seed": {
+      "parent_asin": "B001DEK7OG",
+      "title": "Skullcandy Ink'd (Discontinued by Manufacturer)",
+      "main_category": "Headphones & Earbuds",
+      "original_category": "Headphones & Earbuds"
+    },
+    "recommendations": [
+      {
+        "product_id": "B077NB82ZN",
+        "title": "MAXROCK Sleeping Headphones, in-Ear Soundproof Earplug Soft Earbuds with Mic Noise Cancelling Sleep Earphones Earpods for Side Sleeper, Insomnia, Snoring, Air Travel, Bedtime Listening… (Gray)",
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "price": 11.99,
+        "image_path": "data/images/B077NB82ZN.webp",
+        "similarity_score": 0.886803,
+        "text_similarity": 0.853328,
+        "visual_similarity": 0.8738,
+        "sentiment_adjustment": 0.005333,
+        "reasons": [
+          "Same source subcategory: Earbud Headphones",
+          "Text similarity 0.853; visual similarity 0.874",
+          "Review sentiment adjustment +0.0053 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B0B17KY6ZV",
+        "title": "BASN Professional in Ear Monitor Headphones for Singers Drummers Musicians with MMCX Connector IEM Earphones (Lux Clear Red Blue)",
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "price": 53.99,
+        "image_path": "data/images/B0B17KY6ZV.webp",
+        "similarity_score": 0.877875,
+        "text_similarity": 0.849492,
+        "visual_similarity": 0.841071,
+        "sentiment_adjustment": 0.008333,
+        "reasons": [
+          "Same source subcategory: Earbud Headphones",
+          "Text similarity 0.849; visual similarity 0.841",
+          "Review sentiment adjustment +0.0083 from 7 reviews"
+        ]
+      },
+      {
+        "product_id": "B003GXFNVO",
+        "title": "Coby CVEM79GRN Jammerz Platinum High-Performance Isolation Stereo Earphones, Green (Discontinued by Manufacturer)",
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "price": 22.3,
+        "image_path": "data/images/B003GXFNVO.webp",
+        "similarity_score": 0.877106,
+        "text_similarity": 0.846882,
+        "visual_similarity": 0.862179,
+        "sentiment_adjustment": 0.002667,
+        "reasons": [
+          "Same source subcategory: Earbud Headphones",
+          "Text similarity 0.847; visual similarity 0.862",
+          "Review sentiment adjustment +0.0027 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B08X7KZF3P",
+        "title": "JBL E25BT Bluetooth in-Ear Headphones White",
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "price": 49.98,
+        "image_path": "data/images/B08X7KZF3P.webp",
+        "similarity_score": 0.874888,
+        "text_similarity": 0.848941,
+        "visual_similarity": 0.866567,
+        "sentiment_adjustment": -0.002,
+        "reasons": [
+          "Same source subcategory: Earbud Headphones",
+          "Text similarity 0.849; visual similarity 0.867",
+          "Review sentiment adjustment -0.0020 from 5 reviews"
+        ]
+      },
+      {
+        "product_id": "B0C1KX2J75",
+        "title": "SoundPEATS Q30 HD Bluetooth Headphones in-Ear Stereo Wireless 5.0 Magnetic Earphones IPX6 Sweatproof Earbuds with Mic for Sports, Immersive Bass, 10mm Drivers, aptX-HD, 13 Hours Playtime",
+        "category": "Headphones & Earbuds",
+        "original_category": "Headphones & Earbuds",
+        "price": 32.99,
+        "image_path": "data/images/B0C1KX2J75.webp",
+        "similarity_score": 0.871894,
+        "text_similarity": 0.84172,
+        "visual_similarity": 0.840937,
+        "sentiment_adjustment": 0.006667,
+        "reasons": [
+          "Same source subcategory: Earbud Headphones",
+          "Text similarity 0.842; visual similarity 0.841",
+          "Review sentiment adjustment +0.0067 from 10 reviews"
+        ]
+      }
+    ]
+  },
+  {
+    "seed": {
+      "parent_asin": "B000EXTXSI",
+      "title": "Western Digital My Book Premium 500GB USB/FW 400 Ext Hard Drive",
+      "main_category": "Data Storage",
+      "original_category": "Data Storage"
+    },
+    "recommendations": [
+      {
+        "product_id": "B076B6HGNQ",
+        "title": "WD 4TB My Book Desktop External Hard Drive - USB 3.0 - WDBFJK0040HBK-NESN,Black",
+        "category": "Data Storage",
+        "original_category": "Data Storage",
+        "price": 137.94,
+        "image_path": "data/images/B076B6HGNQ.webp",
+        "similarity_score": 0.907947,
+        "text_similarity": 0.921981,
+        "visual_similarity": 0.818414,
+        "sentiment_adjustment": 0.005333,
+        "reasons": [
+          "Same source subcategory: External Hard Drives",
+          "Text similarity 0.922; visual similarity 0.818",
+          "Review sentiment adjustment +0.0053 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B001NPE9VW",
+        "title": "500 GB Portable Hard Drive",
+        "category": "Data Storage",
+        "original_category": "Data Storage",
+        "price": 198.86,
+        "image_path": "data/images/B001NPE9VW.webp",
+        "similarity_score": 0.900525,
+        "text_similarity": 0.92418,
+        "visual_similarity": 0.794088,
+        "sentiment_adjustment": 0.004,
+        "reasons": [
+          "Same source subcategory: External Hard Drives",
+          "Text similarity 0.924; visual similarity 0.794",
+          "Review sentiment adjustment +0.0040 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B0BJ239KS1",
+        "title": "WD 5TB My Passport Portable External Hard Drive with backup software and password protection, Black - WDBPKJ0050BBK-WESN",
+        "category": "Data Storage",
+        "original_category": "Data Storage",
+        "price": 107.99,
+        "image_path": "data/images/B0BJ239KS1.webp",
+        "similarity_score": 0.896525,
+        "text_similarity": 0.915765,
+        "visual_similarity": 0.800624,
+        "sentiment_adjustment": 0.002667,
+        "reasons": [
+          "Same source subcategory: External Hard Drives",
+          "Text similarity 0.916; visual similarity 0.801",
+          "Review sentiment adjustment +0.0027 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B0BW7WYB4K",
+        "title": "WD 8TB My Book Desktop External Hard Drive, USB 3.0, External HDD with Password Protection and Backup Software - WDBBGB0080HBK-NESN",
+        "category": "Data Storage",
+        "original_category": "Data Storage",
+        "price": 159.99,
+        "image_path": "data/images/B0BW7WYB4K.webp",
+        "similarity_score": 0.894334,
+        "text_similarity": 0.921893,
+        "visual_similarity": 0.768754,
+        "sentiment_adjustment": 0.006667,
+        "reasons": [
+          "Same source subcategory: External Hard Drives",
+          "Text similarity 0.922; visual similarity 0.769",
+          "Review sentiment adjustment +0.0067 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B0792GRZ2D",
+        "title": "WD 4TB My Passport for Mac Portable External Hard Drive, USB-C/USB-A - WDBP6A0040BBK-WESE",
+        "category": "Data Storage",
+        "original_category": "Data Storage",
+        "price": 199.99,
+        "image_path": "data/images/B0792GRZ2D.webp",
+        "similarity_score": 0.889569,
+        "text_similarity": 0.894981,
+        "visual_similarity": 0.824431,
+        "sentiment_adjustment": 0.0,
+        "reasons": [
+          "Same source subcategory: External Hard Drives",
+          "Text similarity 0.895; visual similarity 0.824",
+          "Review sentiment adjustment +0.0000 from 10 reviews"
+        ]
+      }
+    ]
+  },
+  {
+    "seed": {
+      "parent_asin": "B00008SCFL",
+      "title": "Netgear WGR614 Wireless-G Router",
+      "main_category": "Networking",
+      "original_category": "Networking Products"
+    },
+    "recommendations": [
+      {
+        "product_id": "B00BYRPPAS",
+        "title": "D-Link Wireless AC 1200 Mbps Home Cloud App-Enabled Dual-Band Gigabit Router (DIR-850L)",
+        "category": "Networking",
+        "original_category": "Networking Products",
+        "price": 36.9,
+        "image_path": "data/images/B00BYRPPAS.webp",
+        "similarity_score": 0.907478,
+        "text_similarity": 0.876406,
+        "visual_similarity": 0.882626,
+        "sentiment_adjustment": 0.010667,
+        "reasons": [
+          "Same source subcategory: Routers",
+          "Text similarity 0.876; visual similarity 0.883",
+          "Review sentiment adjustment +0.0107 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B001UI4RTG",
+        "title": "NETGEAR RangeMax Wireless Router (WNR1000-100NAS (G54/N150))",
+        "category": "Networking",
+        "original_category": "Networking Products",
+        "price": 63.99,
+        "image_path": "data/images/B001UI4RTG.webp",
+        "similarity_score": 0.897394,
+        "text_similarity": 0.912247,
+        "visual_similarity": 0.796639,
+        "sentiment_adjustment": 0.006667,
+        "reasons": [
+          "Same source subcategory: Routers",
+          "Text similarity 0.912; visual similarity 0.797",
+          "Review sentiment adjustment +0.0067 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B00F3ZN536",
+        "title": "Netgear WNR2500-100NAS IEEE 802.11n 450 Mbps Wireless Router",
+        "category": "Networking",
+        "original_category": "Networking Products",
+        "price": 49.97,
+        "image_path": "data/images/B00F3ZN536.webp",
+        "similarity_score": 0.887127,
+        "text_similarity": 0.920417,
+        "visual_similarity": 0.769659,
+        "sentiment_adjustment": 0.0,
+        "reasons": [
+          "Same source subcategory: Routers",
+          "Text similarity 0.920; visual similarity 0.770",
+          "Review sentiment adjustment +0.0000 from 6 reviews"
+        ]
+      },
+      {
+        "product_id": "B07PKRTZLR",
+        "title": "Soul Inscriptions Press Belkin AC1900 Wi-Fi Dual-Band AC+ Gigabit Router (F9K1124)",
+        "category": "Networking",
+        "original_category": "Networking Products",
+        "price": 44.95,
+        "image_path": "data/images/B07PKRTZLR.webp",
+        "similarity_score": 0.879734,
+        "text_similarity": 0.845101,
+        "visual_similarity": 0.87865,
+        "sentiment_adjustment": 0.001333,
+        "reasons": [
+          "Same source subcategory: Routers",
+          "Text similarity 0.845; visual similarity 0.879",
+          "Review sentiment adjustment +0.0013 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B09P4NGVWB",
+        "title": "NETGEAR WiFi Router (R6120) - AC1200 Dual Band Wireless Speed (up to 1200 Mbps) | Up to 1200 sq ft Coverage & 20 Devices | 4 x 10/100 Fast Ethernet and 1 x 2.0 USB ports",
+        "category": "Networking",
+        "original_category": "Networking Products",
+        "price": 44.97,
+        "image_path": "data/images/B09P4NGVWB.webp",
+        "similarity_score": 0.87569,
+        "text_similarity": 0.887843,
+        "visual_similarity": 0.77792,
+        "sentiment_adjustment": 0.004,
+        "reasons": [
+          "Same source subcategory: Routers",
+          "Text similarity 0.888; visual similarity 0.778",
+          "Review sentiment adjustment +0.0040 from 10 reviews"
+        ]
+      }
+    ]
+  },
+  {
+    "seed": {
+      "parent_asin": "B01MY48T0O",
+      "title": "TCL 32S305 32-Inch 720p Roku Smart LED TV (2017 Model)",
+      "main_category": "TV & Video Players",
+      "original_category": "Televisions"
+    },
+    "recommendations": [
+      {
+        "product_id": "B074KRM3H4",
+        "title": "SAMSUNG Electronics UN32M4500A 32-Inch 720p Smart LED TV (2017 Model)",
+        "category": "TV & Video Players",
+        "original_category": "Televisions",
+        "price": 187.9,
+        "image_path": "data/images/B074KRM3H4.webp",
+        "similarity_score": 0.894712,
+        "text_similarity": 0.907272,
+        "visual_similarity": 0.787928,
+        "sentiment_adjustment": 0.009333,
+        "reasons": [
+          "Same source subcategory: LED & LCD TVs",
+          "Text similarity 0.907; visual similarity 0.788",
+          "Review sentiment adjustment +0.0093 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B0BTPBBL52",
+        "title": "SAMSUNG 32-inch Class LED Smart FHD TV 1080P (UN32N5300AFXZA, 2018 Model)",
+        "category": "TV & Video Players",
+        "original_category": "Televisions",
+        "price": 217.9,
+        "image_path": "data/images/B0BTPBBL52.webp",
+        "similarity_score": 0.886904,
+        "text_similarity": 0.904316,
+        "visual_similarity": 0.785099,
+        "sentiment_adjustment": 0.004,
+        "reasons": [
+          "Same source subcategory: LED & LCD TVs",
+          "Text similarity 0.904; visual similarity 0.785",
+          "Review sentiment adjustment +0.0040 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B09YWT3P5Q",
+        "title": "TCL 32\" Class 3-Series HD 720p LED Smart Roku TV - 32S355, Black",
+        "category": "TV & Video Players",
+        "original_category": "Televisions",
+        "price": 129.99,
+        "image_path": "data/images/B09YWT3P5Q.webp",
+        "similarity_score": 0.867711,
+        "text_similarity": 0.942297,
+        "visual_similarity": 0.631491,
+        "sentiment_adjustment": 0.01,
+        "reasons": [
+          "Same source subcategory: LED & LCD TVs",
+          "Text similarity 0.942; visual similarity 0.631",
+          "Review sentiment adjustment +0.0100 from 5 reviews"
+        ]
+      },
+      {
+        "product_id": "B07PQBL9Y8",
+        "title": "LG 55UM7300PUA Alexa Built-in 55\" 4K Ultra HD Smart LED TV (2019)",
+        "category": "TV & Video Players",
+        "original_category": "Televisions",
+        "price": 599.99,
+        "image_path": "data/images/B07PQBL9Y8.webp",
+        "similarity_score": 0.867497,
+        "text_similarity": 0.856062,
+        "visual_similarity": 0.804432,
+        "sentiment_adjustment": 0.005333,
+        "reasons": [
+          "Same source subcategory: LED & LCD TVs",
+          "Text similarity 0.856; visual similarity 0.804",
+          "Review sentiment adjustment +0.0053 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B09H41BTVN",
+        "title": "VIZIO 32-inch D-Series Full HD 720p Smart TV with Apple AirPlay and Chromecast Built-in, Alexa Compatibility, D32h-J09, 2022 Model",
+        "category": "TV & Video Players",
+        "original_category": "Televisions",
+        "price": 109.99,
+        "image_path": "data/images/B09H41BTVN.webp",
+        "similarity_score": 0.866557,
+        "text_similarity": 0.87108,
+        "visual_similarity": 0.800431,
+        "sentiment_adjustment": -0.002667,
+        "reasons": [
+          "Same source subcategory: LED & LCD TVs",
+          "Text similarity 0.871; visual similarity 0.800",
+          "Review sentiment adjustment -0.0027 from 10 reviews"
+        ]
+      }
+    ]
+  },
+  {
+    "seed": {
+      "parent_asin": "B000HHHP7C",
+      "title": "KByte Fingerprint Security Reader",
+      "main_category": "Security & Surveillance",
+      "original_category": "Biometrics"
+    },
+    "recommendations": [
+      {
+        "product_id": "B0BT1TM3S2",
+        "title": "GE Personal Security Window and Door Alarm, 1 Pack, DIY Protection, Burglar Alert, Wireless, Magnetic Sensor, Off/Chime/Alarm, Easy Installation, Ideal for Home, Garage, Apartment and More, 56789",
+        "category": "Security & Surveillance",
+        "original_category": "Home Security Systems",
+        "price": 7.99,
+        "image_path": "data/images/B0BT1TM3S2.webp",
+        "similarity_score": 0.702577,
+        "text_similarity": 0.82489,
+        "visual_similarity": 0.611846,
+        "sentiment_adjustment": 0.005333,
+        "reasons": [
+          "Same main category fallback: Security & Surveillance; source category: Home Security Systems",
+          "Text similarity 0.825; visual similarity 0.612",
+          "Review sentiment adjustment +0.0053 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B0C2XMC1TT",
+        "title": "GE Personal Security Window and Door Alarm, 2 Pack, DIY Protection, Burglar Alert, Wireless Chime/Alarm, Easy Installation, Ideal for Home, Garage, Apartment and More, 45115",
+        "category": "Security & Surveillance",
+        "original_category": "Home Security Systems",
+        "price": 11.36,
+        "image_path": "data/images/B0C2XMC1TT.webp",
+        "similarity_score": 0.700216,
+        "text_similarity": 0.822218,
+        "visual_similarity": 0.622209,
+        "sentiment_adjustment": 0.001333,
+        "reasons": [
+          "Same main category fallback: Security & Surveillance; source category: Home Security Systems",
+          "Text similarity 0.822; visual similarity 0.622",
+          "Review sentiment adjustment +0.0013 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B099RQDXGL",
+        "title": "REOLINK Indoor Security Camera, E1 Pro 4MP HD Plug-in WiFi Camera for Home Security, 2.4/5 GHz Wi-Fi, Auto Tracking, Smart Person/Pet Detection, Local Storage, Ideal for Baby Monitor/Pet Camera",
+        "category": "Security & Surveillance",
+        "original_category": "Video Surveillance",
+        "price": 42.39,
+        "image_path": "data/images/B099RQDXGL.webp",
+        "similarity_score": 0.69325,
+        "text_similarity": 0.82681,
+        "visual_similarity": 0.572792,
+        "sentiment_adjustment": 0.006667,
+        "reasons": [
+          "Same main category fallback: Security & Surveillance; source category: Video Surveillance",
+          "Text similarity 0.827; visual similarity 0.573",
+          "Review sentiment adjustment +0.0067 from 10 reviews"
+        ]
+      },
+      {
+        "product_id": "B0BKFY6DD9",
+        "title": "Swann Add-On DVR Bullet Security Camera System with Sensor Spotlight, 4K Ultra HD Video, Indoor or Outdoor Design, Dusk to Dawn Color Night Vision Plus True Detect™ Heat and Motion Detection",
+        "category": "Security & Surveillance",
+        "original_category": "Video Surveillance",
+        "price": 78.95,
+        "image_path": "data/images/B0BKFY6DD9.webp",
+        "similarity_score": 0.692071,
+        "text_similarity": 0.822067,
+        "visual_similarity": 0.57554,
+        "sentiment_adjustment": 0.007273,
+        "reasons": [
+          "Same main category fallback: Security & Surveillance; source category: Video Surveillance",
+          "Text similarity 0.822; visual similarity 0.576",
+          "Review sentiment adjustment +0.0073 from 6 reviews"
+        ]
+      },
+      {
+        "product_id": "B0C5WZXK25",
+        "title": "Security Cameras Wireless Outdoor - 1080p HD Night Vision WiFi Wireless Cameras for Home Security, Waterproof Surveillance Camera with Motion Detection, 2-Way Audio, Rechargeable Battery, SD Storage",
+        "category": "Security & Surveillance",
+        "original_category": "Video Surveillance",
+        "price": 39.99,
+        "image_path": "data/images/B0C5WZXK25.webp",
+        "similarity_score": 0.690879,
+        "text_similarity": 0.812132,
+        "visual_similarity": 0.5918,
+        "sentiment_adjustment": 0.006667,
+        "reasons": [
+          "Same main category fallback: Security & Surveillance; source category: Video Surveillance",
+          "Text similarity 0.812; visual similarity 0.592",
+          "Review sentiment adjustment +0.0067 from 10 reviews"
+        ]
+      }
+    ]
+  }
+]
