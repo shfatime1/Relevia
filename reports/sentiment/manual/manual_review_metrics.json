@@ -1,0 +1,117 @@
+{
+  "reference_labels": "AI-generated, not independent human ground truth",
+  "sample_description": "45 reviews, nine per star rating, disagreement-enriched",
+  "review_count": 45,
+  "labels_order": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "reference_label_distribution": {
+    "positive": 15,
+    "negative": 25,
+    "neutral": 5
+  },
+  "rating_distribution": {
+    "4": 9,
+    "3": 9,
+    "5": 9,
+    "1": 9,
+    "2": 9
+  },
+  "model_disagreements": 25,
+  "source_sha256": {
+    "labeled_csv": "64b40dc73bf9abe0cba978b136e3e2557ad7658a3f5873d134d948f9b64f8a46",
+    "original_sample_csv": "f4969629301eb7fcd0cf4dffaaf7e709869652aaeb890c98ba68ab6abc29744f",
+    "baseline": "d2a4dc2c1fc15dcbd285e601a901af8bdf1fdb0d1844eb377af20b7faed52e44",
+    "product_review_model": "54d2c68c063f6f1f159a31995353d28eb734940980cee5dbe5ddafa346bda208"
+  },
+  "models": {
+    "baseline": {
+      "model": "ZyroGod/distilbert-sentiment-classifier",
+      "revision": "cbfee930df13824cf267b8d93921dd3a1783af83",
+      "accuracy": 0.4888888888888889,
+      "macro_f1": 0.4704100652376515,
+      "per_class": {
+        "negative": {
+          "precision": 0.8333333333333334,
+          "recall": 0.4,
+          "f1-score": 0.5405405405405406,
+          "support": 25.0
+        },
+        "neutral": {
+          "precision": 0.15789473684210525,
+          "recall": 0.6,
+          "f1-score": 0.25,
+          "support": 5.0
+        },
+        "positive": {
+          "precision": 0.6428571428571429,
+          "recall": 0.6,
+          "f1-score": 0.6206896551724138,
+          "support": 15.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          10,
+          12,
+          3
+        ],
+        [
+          0,
+          3,
+          2
+        ],
+        [
+          2,
+          4,
+          9
+        ]
+      ]
+    },
+    "product_review_model": {
+      "model": "MilindSingh316/distilbert-clothing-review-sentiment",
+      "revision": "1afdfec74e1df72dabf0b82e011d89ecbee9e614",
+      "accuracy": 0.6444444444444445,
+      "macro_f1": 0.5491718426501035,
+      "per_class": {
+        "negative": {
+          "precision": 0.9047619047619048,
+          "recall": 0.76,
+          "f1-score": 0.8260869565217391,
+          "support": 25.0
+        },
+        "neutral": {
+          "precision": 0.18181818181818182,
+          "recall": 0.4,
+          "f1-score": 0.25,
+          "support": 5.0
+        },
+        "positive": {
+          "precision": 0.6153846153846154,
+          "recall": 0.5333333333333333,
+          "f1-score": 0.5714285714285714,
+          "support": 15.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          19,
+          4,
+          2
+        ],
+        [
+          0,
+          2,
+          3
+        ],
+        [
+          2,
+          5,
+          8
+        ]
+      ]
+    }
+  }
+}

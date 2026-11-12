@@ -1,0 +1,75 @@
+{
+  "model": "ZyroGod/distilbert-sentiment-classifier",
+  "revision": "cbfee930df13824cf267b8d93921dd3a1783af83",
+  "input": "review text only",
+  "max_length_tokens": 128,
+  "reviews_sha256": "d9285a26f4e8682587b4665e23b9f5b67c60d357ca8880e0d86a0cc291909d3d",
+  "review_count": 8662,
+  "weak_label_rule": "1-2 negative, 3 neutral, 4-5 positive",
+  "labels_order": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "agreement_rate": 0.7074578619256523,
+  "confusion_matrix": [
+    [
+      1163,
+      282,
+      168
+    ],
+    [
+      336,
+      208,
+      188
+    ],
+    [
+      512,
+      1048,
+      4757
+    ]
+  ],
+  "classification_report": {
+    "negative": {
+      "precision": 0.5783192441571358,
+      "recall": 0.7210167389956602,
+      "f1-score": 0.641832229580574,
+      "support": 1613.0
+    },
+    "neutral": {
+      "precision": 0.1352405721716515,
+      "recall": 0.28415300546448086,
+      "f1-score": 0.18325991189427313,
+      "support": 732.0
+    },
+    "positive": {
+      "precision": 0.9303735575982789,
+      "recall": 0.753047332594586,
+      "f1-score": 0.8323709536307962,
+      "support": 6317.0
+    },
+    "accuracy": 0.7074578619256523,
+    "macro avg": {
+      "precision": 0.5479777913090221,
+      "recall": 0.5860723590182424,
+      "f1-score": 0.5524876983685477,
+      "support": 8662.0
+    },
+    "weighted avg": {
+      "precision": 0.797621196375368,
+      "recall": 0.7074578619256523,
+      "f1-score": 0.7420352061770739,
+      "support": 8662.0
+    }
+  },
+  "star_label_distribution": {
+    "negative": 1613,
+    "positive": 6317,
+    "neutral": 732
+  },
+  "prediction_distribution": {
+    "negative": 2011,
+    "positive": 5113,
+    "neutral": 1538
+  }
+}

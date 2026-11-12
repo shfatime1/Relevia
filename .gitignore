@@ -6,3 +6,17 @@ __pycache__/
 data/
 .cache/
 .ipynb_checkpoints/
+*.parquet
+*.faiss
+*.npy
+*.npz
+*.safetensors
+pytorch_model*.bin
+*.onnx
+*.pt
+*.pth
+*.ckpt
+*.pem
+*.key
+*.p12
+*.pfx

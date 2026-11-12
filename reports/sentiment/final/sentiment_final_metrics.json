@@ -1,0 +1,75 @@
+{
+  "model": "MilindSingh316/distilbert-clothing-review-sentiment",
+  "revision": "1afdfec74e1df72dabf0b82e011d89ecbee9e614",
+  "input": "review text only",
+  "max_length_tokens": 128,
+  "reviews_sha256": "d9285a26f4e8682587b4665e23b9f5b67c60d357ca8880e0d86a0cc291909d3d",
+  "review_count": 8662,
+  "weak_label_rule": "1-2 negative, 3 neutral, 4-5 positive",
+  "labels_order": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "agreement_rate": 0.7635649965365966,
+  "confusion_matrix": [
+    [
+      1244,
+      297,
+      72
+    ],
+    [
+      276,
+      344,
+      112
+    ],
+    [
+      419,
+      872,
+      5026
+    ]
+  ],
+  "classification_report": {
+    "negative": {
+      "precision": 0.6415678184631253,
+      "recall": 0.7712337259764415,
+      "f1-score": 0.7004504504504504,
+      "support": 1613.0
+    },
+    "neutral": {
+      "precision": 0.22736285525446134,
+      "recall": 0.46994535519125685,
+      "f1-score": 0.30645879732739423,
+      "support": 732.0
+    },
+    "positive": {
+      "precision": 0.96468330134357,
+      "recall": 0.7956308374228273,
+      "f1-score": 0.872039559295567,
+      "support": 6317.0
+    },
+    "accuracy": 0.7635649965365966,
+    "macro avg": {
+      "precision": 0.6112046583537188,
+      "recall": 0.6789366395301752,
+      "f1-score": 0.6263162690244706,
+      "support": 8662.0
+    },
+    "weighted avg": {
+      "precision": 0.842205370100972,
+      "recall": 0.7635649965365966,
+      "f1-score": 0.7922914237231963,
+      "support": 8662.0
+    }
+  },
+  "star_label_distribution": {
+    "negative": 1613,
+    "positive": 6317,
+    "neutral": 732
+  },
+  "prediction_distribution": {
+    "negative": 1939,
+    "positive": 5210,
+    "neutral": 1513
+  }
+}

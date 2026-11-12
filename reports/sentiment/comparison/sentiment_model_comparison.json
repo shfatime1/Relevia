@@ -1,0 +1,114 @@
+{
+  "review_count": 8662,
+  "reviews_sha256": "d9285a26f4e8682587b4665e23b9f5b67c60d357ca8880e0d86a0cc291909d3d",
+  "input": "review text only",
+  "weak_label_rule": "1-2 negative, 3 neutral, 4-5 positive",
+  "labels_order": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "star_label_distribution": {
+    "negative": 1613,
+    "positive": 6317,
+    "neutral": 732
+  },
+  "baseline": {
+    "agreement_rate": 0.7074578619256523,
+    "macro_f1": 0.5524876983685477,
+    "per_class": {
+      "negative": {
+        "precision": 0.5783192441571358,
+        "recall": 0.7210167389956602,
+        "f1-score": 0.641832229580574,
+        "support": 1613.0
+      },
+      "neutral": {
+        "precision": 0.1352405721716515,
+        "recall": 0.28415300546448086,
+        "f1-score": 0.18325991189427313,
+        "support": 732.0
+      },
+      "positive": {
+        "precision": 0.9303735575982789,
+        "recall": 0.753047332594586,
+        "f1-score": 0.8323709536307962,
+        "support": 6317.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        1163,
+        282,
+        168
+      ],
+      [
+        336,
+        208,
+        188
+      ],
+      [
+        512,
+        1048,
+        4757
+      ]
+    ],
+    "prediction_distribution": {
+      "negative": 2011,
+      "positive": 5113,
+      "neutral": 1538
+    },
+    "model": "ZyroGod/distilbert-sentiment-classifier",
+    "revision": "cbfee930df13824cf267b8d93921dd3a1783af83",
+    "max_length_tokens": 128
+  },
+  "product_review_model": {
+    "agreement_rate": 0.7635649965365966,
+    "macro_f1": 0.6263162690244706,
+    "per_class": {
+      "negative": {
+        "precision": 0.6415678184631253,
+        "recall": 0.7712337259764415,
+        "f1-score": 0.7004504504504504,
+        "support": 1613.0
+      },
+      "neutral": {
+        "precision": 0.22736285525446134,
+        "recall": 0.46994535519125685,
+        "f1-score": 0.30645879732739423,
+        "support": 732.0
+      },
+      "positive": {
+        "precision": 0.96468330134357,
+        "recall": 0.7956308374228273,
+        "f1-score": 0.872039559295567,
+        "support": 6317.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        1244,
+        297,
+        72
+      ],
+      [
+        276,
+        344,
+        112
+      ],
+      [
+        419,
+        872,
+        5026
+      ]
+    ],
+    "prediction_distribution": {
+      "negative": 1939,
+      "positive": 5210,
+      "neutral": 1513
+    },
+    "model": "MilindSingh316/distilbert-clothing-review-sentiment",
+    "revision": "1afdfec74e1df72dabf0b82e011d89ecbee9e614",
+    "max_length_tokens": 128
+  }
+}
