@@ -108,3 +108,17 @@ Missing products return 404, invalid parameters or images return 422, and an ima
 ```powershell
 .venv\Scripts\python -X utf8 -m unittest discover -s tests -v
 ```
+
+## Phase 5B: React frontend
+
+Start the Phase 5A API as shown above, then in a second terminal run:
+
+```powershell
+cd frontend
+npm.cmd install
+npm.cmd run dev
+```
+
+Open the local URL printed by Vite. Its development proxy forwards `/api` and `/images` to the backend at `127.0.0.1:8000`, so both processes need to be running. On macOS/Linux use `npm` in place of `npm.cmd`. Run `npm.cmd run build` to verify the production bundle. The interface uses the existing catalog, search, recommendations and predicted sentiment; visual matches and sentiment can be imperfect, and dataset prices may be outdated. Search results show up to the top 100 matches returned by the API.
+
+If searches report that the backend is unavailable, start the FastAPI command from the preceding section and wait for `Application startup complete` while the models load. Then select **Try again** in the frontend; it reloads the search and catalog metadata without a page refresh.
