@@ -28,7 +28,7 @@ SPEC = re.compile(r'\b(wireless|bluetooth|wi-?fi|usb|hdmi|digital|analog|optical
 
 # Group the actual source taxonomy branches; unknown branches are left for review.
 CATEGORY_GROUPS = {
-    'Computers & Components': ('Computers & Tablets', 'Computer Components', 'Gaming Computers', 'Computers', 'Monitors', 'Printers & Scanners'),
+    'Computers & Components': ('Computers & Tablets', 'Computer Components', 'Gaming Computers', 'Computers', 'Monitors', 'Printers & Scanners', 'Computer Accessories & Peripherals', 'Laptop Accessories'),
     'Data Storage': ('Data Storage',),
     'Networking': ('Networking Products',),
     'Headphones & Earbuds': ('Headphones & Earbuds', 'Amplifiers'),
@@ -39,7 +39,7 @@ CATEGORY_GROUPS = {
     'Security & Surveillance': ('Video Surveillance', 'Surveillance Video Equipment', 'Home Security Systems', 'Biometrics', 'Motion Detectors', 'Horns & Sirens'),
     'Vehicle Electronics & GPS': ('Car Electronics', 'Marine Electronics', 'GPS Trackers', 'Sports & Handheld GPS', 'Sports & Vehicle GPS', 'Item Finders'),
     'Wearable Technology': ('Smartwatches', 'Glasses'),
-    'Power & Lighting': ('Power Converters', 'Power Strips & Surge Protectors', 'Reading Lights'),
+    'Power & Lighting': ('Power Converters', 'Power Strips & Surge Protectors', 'Reading Lights', 'Power Accessories'),
 }
 MAIN_CATEGORY = {category: group for group, categories in CATEGORY_GROUPS.items() for category in categories}
 

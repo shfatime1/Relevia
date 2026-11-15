@@ -122,3 +122,11 @@ npm.cmd run dev
 Open the local URL printed by Vite. Its development proxy forwards `/api` and `/images` to the backend at `127.0.0.1:8000`, so both processes need to be running. On macOS/Linux use `npm` in place of `npm.cmd`. Run `npm.cmd run build` to verify the production bundle. The interface uses the existing catalog, search, recommendations and predicted sentiment; visual matches and sentiment can be imperfect, and dataset prices may be outdated. Search results show up to the top 100 matches returned by the API.
 
 If searches report that the backend is unavailable, start the FastAPI command from the preceding section and wait for `Application startup complete` while the models load. Then select **Try again** in the frontend; it reloads the search and catalog metadata without a page refresh.
+
+## Phase 6A: dataset expansion
+
+`scripts/expand.py` adds the targeted Electronics peripherals using the original source. It reuses eligible records from `data/progress.sqlite` and keeps its own resumable, byte-range scan checkpoints in `data/expansion.sqlite`. Metadata and review scan limits are absolute offsets in MiB (`--metadata-mib`, default 512; `--reviews-mib`, default 4096), rounded to a complete batch. A larger metadata scan after review scanning requires restarting the review stream so earlier reviews for newly discovered candidates are not missed; already cached reviews are retained.
+
+Use `--scan-only` to collect candidates and reviews, `--prepare-only` to download images and create the ignored `data/expansion_selection.json`, and `--commit-prepared` to stage and write the reviewed selection. The existing Arrow schemas and original rows are checked before replacement; pre-expansion Parquet backups are kept under `data/`. `scripts/validate.py` checks review provenance against both caches.
+
+The expanded dataset has 1,120 products and 9,748 reviews. **The existing sentiment predictions, E5 and CLIP embeddings, and FAISS indexes have not been updated.** They must be regenerated or updated in Phase 6B before using the expanded catalog through search, recommendations, or the API. Existing index loaders can rebuild stale indexes when started, so avoid starting them until that phase.

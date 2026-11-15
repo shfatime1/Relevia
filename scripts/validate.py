@@ -41,12 +41,15 @@ if len(ids) != len(set(ids)): errors.append('Duplicate product IDs')
 if set(counts) - set(ids): errors.append('Reviews without matching product')
 if any(not isinstance(r['rating'], (float, int)) or not 1 <= r['rating'] <= 5 for r in reviews): errors.append('Invalid review rating')
 if (data / 'progress.sqlite').exists():
-    db = sqlite3.connect(data / 'progress.sqlite')
     fields = ('parent_asin', 'asin', 'user_id', 'rating', 'title', 'text', 'timestamp', 'helpful_vote', 'verified_purchase')
-    source = Counter(tuple(json.loads(raw).get(k) for k in fields) for (raw,) in db.execute('SELECT review FROM reviews'))
+    source = Counter()
+    for cache in ('progress.sqlite', 'expansion.sqlite'):
+        if not (data / cache).exists(): continue
+        db = sqlite3.connect(data / cache)
+        source.update(tuple(json.loads(raw).get(k) for k in fields) for (raw,) in db.execute('SELECT review FROM reviews'))
+        db.close()
     output = Counter(tuple(r.get(k) for k in fields) for r in reviews)
     if output - source: errors.append('Reviews not found in cached original source records')
-    db.close()
 images = list((data / 'images').glob('*.webp'))
 if len(images) != len(products): errors.append(f'Image count {len(images)} differs from product count {len(products)}')
 print('Products:', len(products), 'Reviews:', len(reviews), 'Images:', len(images))
