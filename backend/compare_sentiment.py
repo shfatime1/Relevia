@@ -28,13 +28,15 @@ def evaluate(truth, predictions):
 def run(batch_size):
     if batch_size < 1:
         raise ValueError('Batch size must be positive')
-    reviews = pq.read_table(DATA / 'reviews.parquet').to_pylist()
+    original_path = DATA / 'phase6_original_reviews.parquet'
+    review_path = original_path if original_path.exists() else DATA / 'reviews.parquet'
+    reviews = pq.read_table(review_path).to_pylist()
     baseline_rows = pq.read_table(DATA / 'review_sentiment_tweet_baseline.parquet').to_pylist()
     baseline_report = json.loads((BASELINE_REPORTS / 'sentiment_metrics.json').read_text(encoding='utf-8'))
     ids = sentiment.review_ids(reviews)
     if len(reviews) != 8662 or len(baseline_rows) != len(reviews) or len(set(ids)) != len(ids):
         raise ValueError('Unexpected source or baseline review count')
-    if baseline_report['reviews_sha256'] != sentiment.file_hash(DATA / 'reviews.parquet'):
+    if baseline_report['reviews_sha256'] != sentiment.file_hash(review_path):
         raise ValueError('Baseline report refers to a different reviews file')
     for review, review_id, row in zip(reviews, ids, baseline_rows):
         if (row['review_id'] != review_id or row['parent_asin'] != review['parent_asin'] or
@@ -50,16 +52,27 @@ def run(batch_size):
     if baseline['max_length_tokens'] != sentiment.MAX_LENGTH:
         raise ValueError('Baseline and candidate token limits differ')
 
-    # Reuse the existing batch inference/checkpoint logic with isolated model and cache settings.
-    sentiment.MODEL = CANDIDATE
-    sentiment.REVISION = REVISION
-    sentiment.CACHE = sentiment.ROOT / '.cache' / 'sentiment_product_comparison'
-    predictions, confidence, fingerprint = sentiment.predict(reviews, batch_size)
-    labels = [LABELS[int(i)] for i in predictions]
-    candidate_rows = [{'review_id': review_id, 'parent_asin': review['parent_asin'],
-                       'rating': review['rating'], 'sentiment': label, 'confidence': float(score)}
-                      for review_id, review, label, score in zip(ids, reviews, labels, confidence)]
-    pq.write_table(pa.Table.from_pylist(candidate_rows), DATA / 'review_sentiment_product_comparison.parquet', compression='zstd')
+    # Keep the historical comparison separate from the expanded production cache.
+    candidate_path = DATA / 'review_sentiment_product_comparison.parquet'
+    if candidate_path.exists():
+        candidate_rows = pq.read_table(candidate_path).to_pylist()
+    else:
+        sentiment.MODEL = CANDIDATE
+        sentiment.REVISION = REVISION
+        sentiment.CACHE = sentiment.ROOT / '.cache' / 'sentiment_historical_comparison'
+        predictions, confidence, _ = sentiment.predict(reviews, batch_size, review_path)
+        candidate_rows = [{'review_id': review_id, 'parent_asin': review['parent_asin'],
+                           'rating': review['rating'], 'sentiment': LABELS[int(label)], 'confidence': float(score)}
+                          for review_id, review, label, score in zip(ids, reviews, predictions, confidence)]
+        pq.write_table(pa.Table.from_pylist(candidate_rows), candidate_path, compression='zstd')
+    if len(candidate_rows) != len(reviews):
+        raise ValueError('Unexpected candidate prediction count')
+    for review, review_id, row in zip(reviews, ids, candidate_rows):
+        if (row['review_id'] != review_id or row['parent_asin'] != review['parent_asin'] or
+                row['rating'] != review['rating'] or row['sentiment'] not in LABELS):
+            raise ValueError(f'Candidate prediction does not match source review {review_id}')
+    fingerprint = {'reviews_sha256': sentiment.file_hash(review_path)}
+    labels = [row['sentiment'] for row in candidate_rows]
     candidate = evaluate(truth, labels)
     candidate.update(model=CANDIDATE, revision=REVISION, max_length_tokens=sentiment.MAX_LENGTH)
     metrics = {'review_count': len(reviews), 'reviews_sha256': fingerprint['reviews_sha256'],

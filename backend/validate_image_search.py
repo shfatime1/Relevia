@@ -13,10 +13,10 @@ from backend.image_search import CACHE, INDEX_DIR, ImageSearch
 def main():
     search = ImageSearch()
     assert search.cache_hit and search.embedded_count == 0
-    assert len(search.products) == len(search.entries) == search.index.ntotal == 1000
-    assert len({entry['id'] for entry in search.entries}) == 1000
+    assert len(search.products) == len(search.entries) == search.index.ntotal
+    assert len({entry['id'] for entry in search.entries}) == len(search.products)
     vectors = np.load(INDEX_DIR / 'embeddings.npy', allow_pickle=False)
-    assert vectors.shape == (1000, 512) and search.index.d == 512
+    assert vectors.shape == (len(search.products), 512) and search.index.d == 512
     assert np.isfinite(vectors).all() and np.allclose(np.linalg.norm(vectors, axis=1), 1, atol=1e-5)
     assert np.allclose(search.index.reconstruct_n(0, len(vectors)), vectors, atol=1e-6)
     for entry, product in zip(search.entries, search.products):

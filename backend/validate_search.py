@@ -10,7 +10,7 @@ from backend.search import INDEX_DIR, ProductSearch
 
 def main():
     search = ProductSearch()
-    assert len(search.ids) == len(set(search.ids)) == search.index.ntotal == 1000
+    assert len(search.ids) == len(set(search.ids)) == search.index.ntotal
     assert search.load_index()
     for key in ('dataset_sha256', 'revision'):
         original = search.fingerprint[key]
@@ -19,7 +19,7 @@ def main():
         search.fingerprint[key] = original
     assert search.load_index()
     vectors = np.load(INDEX_DIR / 'embeddings.npy', allow_pickle=False)
-    assert vectors.shape == (1000, 384)
+    assert vectors.shape == (len(search.ids), 384)
     assert np.isfinite(vectors).all() and np.allclose(np.linalg.norm(vectors, axis=1), 1, atol=1e-5)
     for i in (0, 499, 999):
         assert np.allclose(search.index.reconstruct(i), vectors[i], atol=1e-6)

@@ -23,7 +23,7 @@ class ApiTests(unittest.TestCase):
     def test_catalog_filters_and_pagination(self):
         first = self.client.get('/api/products', params={'page': 1, 'page_size': 10}).json()
         second = self.client.get('/api/products', params={'page': 2, 'page_size': 10}).json()
-        self.assertEqual(first['total'], 1000)
+        self.assertEqual(first['total'], 1120)
         self.assertEqual(len(first['items']), 10)
         self.assertTrue(set(p['product_id'] for p in first['items']).isdisjoint(p['product_id'] for p in second['items']))
         filtered = self.client.get('/api/products', params={'category': 'digital cameras', 'min_price': 50, 'max_price': 200}).json()
@@ -86,6 +86,25 @@ class ApiTests(unittest.TestCase):
             self.assertEqual(filtered['total_reviews'], response['summary'][f'{label}_count'])
             self.assertTrue(all(review['sentiment'] == label for review in filtered['reviews']))
         self.assertEqual(self.client.get(f'/api/products/{product_id}/sentiment', params={'sentiment': 'mixed'}).status_code, 422)
+
+    def test_expanded_catalog_search_and_sentiment(self):
+        for query in ('mouse', 'keyboard', 'webcam'):
+            response = self.client.get('/api/search/text', params={'q': query})
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(len(response.json()['items']), 5)
+            self.assertTrue(any(query in item['title'].casefold() for item in response.json()['items']))
+        product_id = 'B000068MP5'
+        product = self.client.get(f'/api/products/{product_id}').json()
+        self.assertEqual(product['product_id'], product_id)
+        self.assertEqual(self.client.get(product['image_url']).status_code, 200)
+        sentiment = self.client.get(f'/api/products/{product_id}/sentiment').json()
+        self.assertGreaterEqual(sentiment['total_reviews'], 5)
+        self.assertEqual(sentiment['total_reviews'], sentiment['summary']['review_count'])
+        self.assertEqual(len(self.client.get(f'/api/products/{product_id}/recommendations').json()['items']), 5)
+        with Path('data/images/B000068MP5.webp').open('rb') as source:
+            response = self.client.post('/api/search/image', files={'file': ('mouse.webp', source, 'image/webp')})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['items']), 5)
 
 
 if __name__ == '__main__':

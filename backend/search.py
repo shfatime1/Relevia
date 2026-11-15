@@ -102,11 +102,34 @@ class ProductSearch:
             return False
 
     def build_index(self):
-        print(f'Building E5 embeddings for {len(self.ids)} products on CPU...', flush=True)
-        vectors = self.get_model().encode(
-            ['passage: ' + text for text in self.texts], batch_size=self.batch_size,
+        previous = None
+        try:
+            original_path = DATA.parent / 'phase6_original_products.parquet'
+            original = pq.read_table(original_path).to_pylist()
+            count = len(original)
+            manifest = json.loads((INDEX_DIR / 'manifest.json').read_text(encoding='utf-8'))
+            expected = {**self.fingerprint, 'dataset_sha256': digest_file(original_path),
+                        'ids': [p['parent_asin'] for p in original]}
+            if (0 < count < len(self.products) and self.products[:count] == original and
+                    manifest['fingerprint'] == expected and
+                    all(digest_file(INDEX_DIR / name) == manifest['sha256'][name]
+                        for name in ('embeddings.npy', 'products.faiss'))):
+                old_vectors = np.load(INDEX_DIR / 'embeddings.npy', allow_pickle=False)
+                old_index = faiss.read_index(str(INDEX_DIR / 'products.faiss'))
+                if (old_vectors.shape == (count, 384) and np.isfinite(old_vectors).all() and
+                        np.allclose(np.linalg.norm(old_vectors, axis=1), 1, atol=1e-5) and
+                        old_index.ntotal == count and old_index.d == 384 and
+                        np.array_equal(old_vectors, old_index.reconstruct_n(0, count))):
+                    previous = old_vectors
+        except (OSError, ValueError, KeyError, RuntimeError, json.JSONDecodeError):
+            pass
+        reused = len(previous) if previous is not None else 0
+        print(f'Encoding {len(self.ids) - reused} E5 passages on CPU; reusing {reused} cached vectors.', flush=True)
+        new_vectors = self.get_model().encode(
+            ['passage: ' + text for text in self.texts[reused:]], batch_size=self.batch_size,
             normalize_embeddings=True, convert_to_numpy=True, show_progress_bar=True,
         ).astype('float32')
+        vectors = np.concatenate((previous, new_vectors)) if previous is not None else new_vectors
         if vectors.shape != (len(self.ids), 384) or not np.isfinite(vectors).all():
             raise ValueError(f'Invalid embeddings: {vectors.shape}')
         vectors = np.ascontiguousarray(vectors)

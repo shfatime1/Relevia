@@ -13,6 +13,7 @@ DATA = ROOT / 'data'
 CACHE = ROOT / '.cache' / 'sentiment_product_comparison'
 REPORTS = ROOT / 'reports' / 'sentiment'
 FINAL_REPORTS = REPORTS / 'final'
+CURRENT_REPORTS = REPORTS / 'expanded'
 os.environ.setdefault('HF_HOME', str(ROOT / '.cache' / 'huggingface'))
 
 import matplotlib
@@ -57,9 +58,9 @@ def save_cache(fingerprint, predictions, confidence):
     temporary.replace(CACHE / 'predictions.npz')
 
 
-def predict(reviews, batch_size):
+def predict(reviews, batch_size, source_path=DATA / 'reviews.parquet'):
     CACHE.mkdir(parents=True, exist_ok=True)
-    fingerprint = {'reviews_sha256': file_hash(DATA / 'reviews.parquet'), 'model': MODEL,
+    fingerprint = {'reviews_sha256': file_hash(source_path), 'model': MODEL,
                    'revision': REVISION, 'max_length': MAX_LENGTH, 'input': 'review_text_v1'}
     predictions = np.full(len(reviews), -1, dtype=np.int8)
     confidence = np.zeros(len(reviews), dtype=np.float32)
@@ -69,14 +70,28 @@ def predict(reviews, batch_size):
                     cached['predictions'].shape == predictions.shape and cached['confidence'].shape == confidence.shape):
                 predictions = cached['predictions'].copy()
                 confidence = cached['confidence'].copy()
-                if not (np.isin(predictions, [-1, 0, 1, 2]).all() and np.isfinite(confidence).all() and
-                        ((confidence >= 0) & (confidence <= 1)).all()):
-                    raise ValueError('Invalid cached predictions')
+            else:
+                # Phase 6A saved the exact pre-expansion source; never reuse by position
+                # unless both the source rows and the original model fingerprint match.
+                original_path = DATA / 'phase6_original_reviews.parquet'
+                original = pq.read_table(original_path).to_pylist()
+                old_fingerprint = {**fingerprint, 'reviews_sha256': file_hash(original_path)}
+                count = len(original)
+                if (count < len(reviews) and reviews[:count] == original and
+                        json.loads(str(cached['fingerprint'])) == old_fingerprint and
+                        cached['predictions'].shape == (count,) and cached['confidence'].shape == (count,)):
+                    predictions[:count] = cached['predictions']
+                    confidence[:count] = cached['confidence']
+            if not (np.isin(predictions, [-1, 0, 1, 2]).all() and np.isfinite(confidence).all() and
+                    ((confidence >= 0) & (confidence <= 1)).all()):
+                raise ValueError('Invalid cached predictions')
     except (OSError, ValueError, KeyError, json.JSONDecodeError):
         predictions.fill(-1); confidence.fill(0)
     pending = np.flatnonzero(predictions < 0).tolist()
     reused = len(reviews) - len(pending)
     print(f'Reusing {reused} cached predictions; {len(pending)} remaining.', flush=True)
+    if reused and pending:
+        save_cache(fingerprint, predictions, confidence)
     if not pending:
         return predictions, confidence, fingerprint
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -110,17 +125,21 @@ def predict(reviews, batch_size):
     return predictions, confidence, fingerprint
 
 
-def run(batch_size, baseline=False):
+def run(batch_size, baseline=False, report_dir=CURRENT_REPORTS):
     started = time.perf_counter()
-    reviews = pq.read_table(DATA / 'reviews.parquet').to_pylist()
-    products = pq.read_table(DATA / 'products.parquet').to_pylist()
+    # The baseline is the historical Phase 3 comparison, not a new expanded run.
+    original = baseline and (DATA / 'phase6_original_reviews.parquet').exists() and (DATA / 'phase6_original_products.parquet').exists()
+    review_path = DATA / ('phase6_original_reviews.parquet' if original else 'reviews.parquet')
+    product_path = DATA / ('phase6_original_products.parquet' if original else 'products.parquet')
+    reviews = pq.read_table(review_path).to_pylist()
+    products = pq.read_table(product_path).to_pylist()
     product_ids = [p['parent_asin'] for p in products]
     if len(set(product_ids)) != len(product_ids) or any(r['parent_asin'] not in set(product_ids) for r in reviews):
         raise ValueError('Invalid product IDs or unmatched reviews')
     if any(not isinstance(r['text'], str) or not r['text'].strip() or r['rating'] not in (1, 2, 3, 4, 5) for r in reviews):
         raise ValueError('Each review must have non-empty text and an integer star rating from 1 to 5')
     ids = review_ids(reviews)
-    predicted, confidence, fingerprint = predict(reviews, batch_size)
+    predicted, confidence, fingerprint = predict(reviews, batch_size, review_path)
     rows = [{'review_id': review_id, 'parent_asin': review['parent_asin'], 'rating': review['rating'],
              'sentiment': LABELS[int(label)], 'confidence': float(score)}
             for review_id, review, label, score in zip(ids, reviews, predicted, confidence)]
@@ -142,11 +161,11 @@ def run(batch_size, baseline=False):
         aggregates.append(result)
     pq.write_table(pa.Table.from_pylist(aggregates), DATA / product_output, compression='zstd')
     if not baseline:
-        evaluate(reviews, rows, fingerprint)
+        evaluate(reviews, rows, fingerprint, report_dir)
     print(f'Wrote {len(rows)} review predictions and {len(aggregates)} product summaries in {time.perf_counter()-started:.1f}s.', flush=True)
 
 
-def evaluate(reviews, rows, fingerprint):
+def evaluate(reviews, rows, fingerprint, report_dir=FINAL_REPORTS):
     truth = ['negative' if r['rating'] <= 2 else 'neutral' if r['rating'] == 3 else 'positive' for r in reviews]
     predicted = [r['sentiment'] for r in rows]
     matrix = confusion_matrix(truth, predicted, labels=LABELS)
@@ -158,8 +177,8 @@ def evaluate(reviews, rows, fingerprint):
                'confusion_matrix': matrix.tolist(), 'classification_report': report,
                'star_label_distribution': dict(collections.Counter(truth)),
                'prediction_distribution': dict(collections.Counter(predicted))}
-    FINAL_REPORTS.mkdir(parents=True, exist_ok=True)
-    (FINAL_REPORTS / 'sentiment_final_metrics.json').write_text(json.dumps(metrics, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+    report_dir.mkdir(parents=True, exist_ok=True)
+    (report_dir / 'sentiment_final_metrics.json').write_text(json.dumps(metrics, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     fig, ax = plt.subplots(figsize=(6, 5))
     image = ax.imshow(matrix, cmap='Blues')
     ax.set(xticks=range(3), yticks=range(3), xticklabels=LABELS, yticklabels=LABELS,
@@ -169,8 +188,8 @@ def evaluate(reviews, rows, fingerprint):
             ax.text(col, row, str(matrix[row, col]), ha='center', va='center',
                     color='white' if matrix[row, col] > matrix.max() / 2 else 'black')
     fig.colorbar(image, ax=ax); fig.tight_layout()
-    fig.savefig(FINAL_REPORTS / 'sentiment_final_confusion_matrix.png', dpi=160); plt.close(fig)
-    with (FINAL_REPORTS / 'sentiment_final_examples.csv').open('w', encoding='utf-8', newline='') as output:
+    fig.savefig(report_dir / 'sentiment_final_confusion_matrix.png', dpi=160); plt.close(fig)
+    with (report_dir / 'sentiment_final_examples.csv').open('w', encoding='utf-8', newline='') as output:
         writer = csv.writer(output)
         writer.writerow(['review_id', 'parent_asin', 'rating', 'weak_label', 'sentiment', 'confidence', 'review_text'])
         # Highest-confidence examples in each weak-label/prediction cell; not a random sample.
@@ -196,7 +215,7 @@ def evaluate(reviews, rows, fingerprint):
              'with the sentiment of the text, especially for three-star reviews. The selected source reviews are '
              'not a representative sample of all Amazon reviews. Examples are the highest-confidence rows per '
              'non-empty confusion-matrix cell, not a random sample. Manual labeling is needed for a ground-truth evaluation.\n']
-    (FINAL_REPORTS / 'sentiment_final_evaluation.md').write_text('\n'.join(lines), encoding='utf-8')
+    (report_dir / 'sentiment_final_evaluation.md').write_text('\n'.join(lines), encoding='utf-8')
 
 
 def ids_key(row):
@@ -211,12 +230,12 @@ def inspect(product_id):
     print(json.dumps({'product_id': product_id, 'title': product['title'] if product else None, **match}, indent=2))
 
 
-def validate():
+def validate(report_dir=CURRENT_REPORTS):
     reviews = pq.read_table(DATA / 'reviews.parquet').to_pylist()
     products = pq.read_table(DATA / 'products.parquet').to_pylist()
     rows = pq.read_table(DATA / 'review_sentiment.parquet').to_pylist()
     summaries = pq.read_table(DATA / 'product_sentiment.parquet').to_pylist()
-    if len(reviews) != 8662 or len(products) != 1000 or len(rows) != len(reviews) or len(summaries) != len(products):
+    if not reviews or not products or len(rows) != len(reviews) or len(summaries) != len(products):
         raise ValueError('Unexpected input or output counts')
     ids = review_ids(reviews)
     if len(set(ids)) != len(ids): raise ValueError('Review IDs must be unique')
@@ -240,7 +259,7 @@ def validate():
             count = sum(x['sentiment'] == label for x in items)
             if summary[f'{label}_count'] != count or not np.isclose(summary[f'{label}_percent'], count * 100 / len(items)):
                 raise ValueError(f'Incorrect {label} aggregation: {asin}')
-    metrics = json.loads((FINAL_REPORTS / 'sentiment_final_metrics.json').read_text(encoding='utf-8'))
+    metrics = json.loads((report_dir / 'sentiment_final_metrics.json').read_text(encoding='utf-8'))
     if (metrics['model'] != MODEL or metrics['revision'] != REVISION or
             metrics['reviews_sha256'] != file_hash(DATA / 'reviews.parquet') or
             metrics['confusion_matrix'] != confusion_matrix(truth, [r['sentiment'] for r in rows], labels=LABELS).tolist()):
@@ -262,9 +281,11 @@ def main():
     prepare = commands.add_parser('run')
     prepare.add_argument('--batch-size', type=int, default=32)
     prepare.add_argument('--baseline', action='store_true', help='Recreate the separate tweet-model baseline datasets')
+    prepare.add_argument('--report-dir', type=Path, default=CURRENT_REPORTS)
     product = commands.add_parser('product')
     product.add_argument('parent_asin')
-    commands.add_parser('validate')
+    validation = commands.add_parser('validate')
+    validation.add_argument('--report-dir', type=Path, default=CURRENT_REPORTS)
     args = parser.parse_args()
     if args.command == 'run':
         if args.batch_size < 1: parser.error('Batch size must be positive')
@@ -272,11 +293,11 @@ def main():
             MODEL = 'ZyroGod/distilbert-sentiment-classifier'
             REVISION = 'cbfee930df13824cf267b8d93921dd3a1783af83'
             CACHE = ROOT / '.cache' / 'sentiment'
-        run(args.batch_size, baseline=args.baseline)
+        run(args.batch_size, baseline=args.baseline, report_dir=args.report_dir)
     elif args.command == 'product':
         inspect(args.parent_asin)
     else:
-        validate()
+        validate(args.report_dir)
 
 
 if __name__ == '__main__':
