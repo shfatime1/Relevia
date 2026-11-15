@@ -111,17 +111,25 @@ Missing products return 404, invalid parameters or images return 422, and an ima
 
 ## Phase 5B: React frontend
 
-Start the Phase 5A API as shown above, then in a second terminal run:
+Install Pixi, Node.js/npm, and Python once. From the repository root, create `.venv` and install `requirements.txt` as shown in Phase 1, then install the frontend packages:
 
 ```powershell
 cd frontend
 npm.cmd install
-npm.cmd run dev
+cd ..
 ```
 
-Open the local URL printed by Vite. Its development proxy forwards `/api` and `/images` to the backend at `127.0.0.1:8000`, so both processes need to be running. On macOS/Linux use `npm` in place of `npm.cmd`. Run `npm.cmd run build` to verify the production bundle. The interface uses the existing catalog, search, recommendations and predicted sentiment; visual matches and sentiment can be imperfect, and dataset prices may be outdated. Search results show up to the top 100 matches returned by the API.
+With the prepared `data/` files, images, sentiment summaries, and model caches available, start both servers from the repository root:
 
-If searches report that the backend is unavailable, start the FastAPI command from the preceding section and wait for `Application startup complete` while the models load. Then select **Try again** in the frontend; it reloads the search and catalog metadata without a page refresh.
+```powershell
+pixi run main
+```
+
+Open `http://127.0.0.1:5173`; the API is at `http://127.0.0.1:8000/docs`. Wait for `Application startup complete` while the models load. Press Ctrl+C in the same terminal to stop both servers. The launcher refuses a second instance or occupied ports 8000 and 5173; stop the other process and retry. Pixi runs the existing `.venv` Python and installed frontend dependencies, rather than installing another copy. On macOS/Linux use `npm` in place of `npm.cmd` and `.venv/bin/python` for setup. If model caches are missing, the existing loaders may download models or rebuild indexes.
+
+Vite's development proxy forwards `/api` and `/images` to the backend. Run `npm.cmd run build` in `frontend` to verify the production bundle. The interface uses the existing catalog, search, recommendations and predicted sentiment; visual matches and sentiment can be imperfect, and dataset prices may be outdated. Search results show up to the top 100 matches returned by the API.
+
+The frontend shows “Preparing search…” and retries while the backend starts; search becomes available automatically when initialization finishes. If it remains unavailable for three minutes, check the backend terminal and select **Try again**. Later request errors also offer a retry.
 
 ## Phase 6A: dataset expansion
 

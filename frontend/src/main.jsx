@@ -76,7 +76,33 @@ function App() {
   const [metadataVersion, setMetadataVersion] = useState(0);
   const [filterError, setFilterError] = useState('');
   const [mobileMenu, setMobileMenu] = useState(false);
+  const [readiness, setReadiness] = useState('preparing');
+  const [readinessAttempt, setReadinessAttempt] = useState(0);
   const fileRef = useRef(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    let timer;
+    let controller;
+    const started = Date.now();
+    setReadiness('preparing');
+    async function check() {
+      controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+      try {
+        const data = await api('/api/categories', { signal: controller.signal });
+        if (!cancelled) { setCategories(data.main_categories); setReadiness('ready'); }
+      } catch {
+        if (cancelled) return;
+        if (Date.now() - started >= 180000) setReadiness('unavailable');
+        else timer = setTimeout(check, 2000);
+      } finally {
+        clearTimeout(timeout);
+      }
+    }
+    check();
+    return () => { cancelled = true; clearTimeout(timer); controller?.abort(); };
+  }, [readinessAttempt]);
 
   useEffect(() => {
     const onHash = () => {
@@ -90,6 +116,7 @@ function App() {
     window.addEventListener('hashchange', onHash); return () => window.removeEventListener('hashchange', onHash);
   }, []);
   useEffect(() => {
+    if (readiness !== 'ready') return;
     const controller = new AbortController();
     setMetadataError('');
     api('/api/categories', { signal: controller.signal }).then(d => setCategories(d.main_categories)).catch(e => { if (e.name !== 'AbortError') setMetadataError('Categories or product ratings could not be loaded.'); });
@@ -99,9 +126,9 @@ function App() {
       setCatalog(Object.fromEntries([first, ...rest].flatMap(result => result.items).map(item => [item.product_id, item])));
     }).catch(e => { if (e.name !== 'AbortError') setMetadataError('Categories or product ratings could not be loaded.'); });
     return () => controller.abort();
-  }, [metadataVersion]);
+  }, [metadataVersion, readiness]);
   useEffect(() => {
-    if (productId) return;
+    if (productId || readiness !== 'ready') return;
     const controller = new AbortController();
     const options = { category, min_price: prices.min, max_price: prices.max };
     let path, request = { signal: controller.signal };
@@ -111,9 +138,9 @@ function App() {
     setLoading(true); setError('');
     api(path, request).then(result => { if (!controller.signal.aborted) setData({ items: result.items, total: search ? result.items.length : result.total }); }).catch(e => { if (e.name !== 'AbortError') setError(e.message); }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
-  }, [productId, category, prices, search, search ? 0 : page]);
+  }, [productId, category, prices, search, search ? 0 : page, readiness]);
 
-  const submitSearch = event => { event.preventDefault(); if (!query.trim()) return; setPage(1); setSearch({ type: 'text', query: query.trim() }); window.location.hash = 'catalog'; setTimeout(() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' }), 30); };
+  const submitSearch = event => { event.preventDefault(); if (readiness !== 'ready' || !query.trim()) return; setPage(1); setSearch({ type: 'text', query: query.trim() }); window.location.hash = 'catalog'; setTimeout(() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' }), 30); };
   const upload = event => { const file = event.target.files?.[0]; event.target.value = ''; if (!file) return; if (file.size > 10 * 1024 * 1024) { setError('Please choose an image smaller than 10 MiB.'); return; } setQuery(''); setPage(1); setSearch({ type: 'image', file }); window.location.hash = 'catalog'; setTimeout(() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' }), 30); };
   const resetSearch = () => { setSearch(null); setQuery(''); setPage(1); };
   const retry = () => { setError(''); setMetadataVersion(value => value + 1); setPrices({ ...prices }); };
@@ -128,13 +155,13 @@ function App() {
     <div className="announcement"><span>SMARTER SEARCH, BETTER FINDS</span><span className="announcement-right">A little clarity for your next big find <Sparkles size={13} /></span></div>
     <header className="header"><div className="header-inner"><Logo /><nav className="desktop-nav"><a href="#catalog">Explore products</a><a href="#about">About Relevia</a></nav><div className="header-end"><span className="header-caption">DISCOVER SOMETHING GOOD</span><a href="#catalog" className="header-link">Start exploring <ArrowRight size={15} /></a></div><button className="mobile-menu-btn icon-button" aria-label="Toggle navigation" aria-expanded={mobileMenu} onClick={() => setMobileMenu(!mobileMenu)}>{mobileMenu ? <X /> : <Menu />}</button></div>{mobileMenu && <nav className="mobile-nav"><a href="#catalog" onClick={() => setMobileMenu(false)}>Explore products</a><a href="#about" onClick={() => setMobileMenu(false)}>About Relevia</a></nav>}</header>
     <main>
-      {productId ? <ProductDetail id={productId} catalog={catalog} /> : <>
+      {productId ? readiness === 'ready' ? <ProductDetail id={productId} catalog={catalog} /> : <div className="detail-state" role="status">{readiness === 'preparing' ? 'Preparing search…' : <>The backend is unavailable. <button onClick={() => setReadinessAttempt(value => value + 1)}>Try again</button></>}</div> : <>
         <section className="hero wrap"><div className="hero-copy"><div className="eyebrow"><span className="spark">✳</span> DISCOVER TECH THAT FITS</div><h1>Find your<br /><em>kind of tech.</em></h1><p>Less searching. More finding. Explore electronics that feel just right for you.</p><div className="hero-actions"><a className="button button-dark" href="#catalog">Explore products <ArrowRight size={17} /></a><span className="hero-note"><span className="mini-spark">✳</span> A smarter way to discover</span></div><div className="hero-index"><span>01 / THE DISCOVERY EDIT</span><span>MADE FOR CURIOUS MINDS</span></div></div><div className="hero-visual"><div className="hero-orbit orbit-one"></div><div className="hero-orbit orbit-two"></div><span className="hero-star">✳</span><span className="hero-image-label">A LITTLE SOMETHING<br />FOR EVERY DAY</span>{heroProduct && <a className="hero-product" href={`#/product/${heroProduct.product_id}`}><img src={heroProduct.image_url} alt={heroProduct.title} /></a>}<div className="hero-sticker"><span>CURIOUS<br />BY NATURE</span><ArrowDownRight size={21} /></div><div className="hero-product-tag"><span className="tag-dot"></span> {heroProduct?.original_category || 'Thoughtful discoveries'}</div><span className="hero-number">RE / 001</span></div></section>
-        <section className="search-section wrap" aria-label="Search products"><div className="search-intro"><span className="eyebrow muted">LET'S FIND IT</span><h2>What are you looking for?</h2><p>Search by a few words or a photo. We’ll take it from there.</p></div><form className="search-box" onSubmit={submitSearch}><Search size={21} /><input value={query} onChange={e => setQuery(e.target.value)} aria-label="Search products" placeholder="Try “wireless headphones” or “kamera”" /><input type="file" ref={fileRef} accept="image/*" onChange={upload} className="sr-only" aria-label="Choose an image to search" /><button type="button" className="upload-button" onClick={() => fileRef.current?.click()}><Camera size={19} /><span>Search by image</span></button><button type="submit" className="search-submit" aria-label="Submit search"><ArrowRight size={20} /></button></form><div className="search-caption"><span><Sparkles size={13} /> SEARCH BY WHAT MATTERS TO YOU</span><span>ENGLISH & AZƏRBAYCANCA</span></div></section>
+        <section className="search-section wrap" aria-label="Search products"><div className="search-intro"><span className="eyebrow muted">LET'S FIND IT</span><h2>What are you looking for?</h2><p>Search by a few words or a photo. We’ll take it from there.</p></div>{readiness === 'preparing' && <div className="inline-loading search-readiness" role="status"><span className="spinner" /> Preparing search… This may take a minute while the models load.</div>}{readiness === 'unavailable' && <div className="state-message error-message" role="alert"><strong>Search is unavailable.</strong><span>Check that the backend is running, then try again.</span><button onClick={() => setReadinessAttempt(value => value + 1)}>Try again</button></div>}<form className="search-box" onSubmit={submitSearch}><Search size={21} /><input value={query} onChange={e => setQuery(e.target.value)} aria-label="Search products" placeholder="Try “wireless headphones” or “kamera”" /><input type="file" ref={fileRef} accept="image/*" onChange={upload} className="sr-only" aria-label="Choose an image to search" /><button type="button" disabled={readiness !== 'ready'} className="upload-button" onClick={() => fileRef.current?.click()}><Camera size={19} /><span>Search by image</span></button><button type="submit" disabled={readiness !== 'ready'} className="search-submit" aria-label="Submit search"><ArrowRight size={20} /></button></form><div className="search-caption"><span><Sparkles size={13} /> SEARCH BY WHAT MATTERS TO YOU</span><span>ENGLISH & AZƏRBAYCANCA</span></div></section>
         <section className="catalog-section wrap" id="catalog"><div className="section-heading"><div><div className="eyebrow muted"><span className="spark">✳</span> THE GOOD STUFF</div><h2>Discover your next favorite<span className="heading-dot">.</span></h2><p>Good finds for everyday life, all in one place.</p></div><span className="catalog-counter">{!loading && !search ? `${data.total.toLocaleString()} FINDS` : 'CURATED FOR YOU'} <ArrowDownRight size={17} /></span></div>
           <div className="category-strip" aria-label="Browse categories"><button className={`category-chip ${!category ? 'active' : ''}`} onClick={() => selectCategory('')}><span className="chip-icon"><Sparkles size={17} /></span>All products</button>{categories.map(name => { const Icon = icons[name] || Package; return <button className={`category-chip ${category === name ? 'active' : ''}`} key={name} onClick={() => selectCategory(name)}><span className="chip-icon"><Icon size={17} /></span>{name}</button>; })}</div>{metadataError && !error && <p className="field-error" role="status">{metadataError} <button className="text-button" onClick={retry}>Try again</button></p>}
           <div className="catalog-layout"><aside className="filters"><div className="filter-top"><h3><SlidersHorizontal size={17} /> Filters</h3><button className="text-button" onClick={resetFilters}>Clear all</button></div><div className="filter-block"><h4>Category <ChevronDown size={16} /></h4><div className="category-list"><button className={!category ? 'selected' : ''} onClick={() => selectCategory('')}><span>All categories</span>{!category && <Check size={15} />}</button>{categories.map(name => <button key={name} className={category === name ? 'selected' : ''} onClick={() => selectCategory(name)}><span>{name}</span>{category === name && <Check size={15} />}</button>)}</div></div><form className="filter-block" onSubmit={applyPrices}><h4>Price range <ChevronDown size={16} /></h4><div className="price-inputs"><label><span>MIN</span><div>$ <input type="number" min="0" step="0.01" placeholder="0" value={priceDraft.min} onChange={e => setPriceDraft({ ...priceDraft, min: e.target.value })} /></div></label><span className="price-dash">—</span><label><span>MAX</span><div>$ <input type="number" min="0" step="0.01" placeholder="Any" value={priceDraft.max} onChange={e => setPriceDraft({ ...priceDraft, max: e.target.value })} /></div></label></div>{filterError && <p className="field-error" role="alert">{filterError}</p>}<button className="apply-button" type="submit">Apply price</button></form><div className="filter-help"><CircleHelp size={17} /><p>Looking for something specific?<br /><strong>Try a photo search above.</strong></p></div></aside>
-            <div className="results"><div className="results-bar"><div><strong>{search ? (search.type === 'text' ? `Results for “${search.query}”` : 'Visual matches') : category || 'All products'}</strong><span>{loading ? 'Finding your products…' : error ? 'Results unavailable' : `${data.total.toLocaleString()} ${search && data.total === 100 ? 'top matches' : 'products'}`}</span></div>{search && <button className="clear-search" onClick={resetSearch}><X size={14} /> Clear search</button>}<span className="results-label">EXPLORE THE COLLECTION</span></div>{error && <div className="state-message error-message" role="alert"><strong>We couldn’t load these products.</strong><span>{error}</span><button onClick={retry}>Try again</button></div>}{!error && loading && <div className="product-grid" aria-label="Loading products">{Array.from({ length: 8 }, (_, i) => <div className="skeleton-card" key={i}><div /><span /><span /></div>)}</div>}{!error && !loading && !items.length && <div className="state-message"><Search size={28} /><strong>No products found</strong><span>Try another search or adjust your filters.</span><button onClick={() => { resetFilters(); resetSearch(); }}>Clear filters</button></div>}{!error && !loading && items.length > 0 && <><div className="product-grid">{items.map(item => <ProductCard key={item.product_id} item={item} catalog={catalog} />)}</div>{pages > 1 && <div className="pagination"><button disabled={page === 1} onClick={() => { setPage(page - 1); document.getElementById('catalog')?.scrollIntoView(); }}><ChevronLeft size={16} /> Previous</button><span>Page {page} of {pages}</span><button disabled={page >= pages} onClick={() => { setPage(page + 1); document.getElementById('catalog')?.scrollIntoView(); }}>Next <ChevronRight size={16} /></button></div>}</>}</div>
+            <div className="results"><div className="results-bar"><div><strong>{search ? (search.type === 'text' ? `Results for “${search.query}”` : 'Visual matches') : category || 'All products'}</strong><span>{readiness === 'unavailable' ? 'Backend unavailable' : readiness === 'preparing' ? 'Preparing search…' : loading ? 'Finding your products…' : error ? 'Results unavailable' : `${data.total.toLocaleString()} ${search && data.total === 100 ? 'top matches' : 'products'}`}</span></div>{search && <button className="clear-search" onClick={resetSearch}><X size={14} /> Clear search</button>}<span className="results-label">EXPLORE THE COLLECTION</span></div>{error && <div className="state-message error-message" role="alert"><strong>We couldn’t load these products.</strong><span>{error}</span><button onClick={retry}>Try again</button></div>}{readiness !== 'unavailable' && !error && loading && <div className="product-grid" aria-label="Loading products">{Array.from({ length: 8 }, (_, i) => <div className="skeleton-card" key={i}><div /><span /><span /></div>)}</div>}{!error && !loading && !items.length && <div className="state-message"><Search size={28} /><strong>No products found</strong><span>Try another search or adjust your filters.</span><button onClick={() => { resetFilters(); resetSearch(); }}>Clear filters</button></div>}{!error && !loading && items.length > 0 && <><div className="product-grid">{items.map(item => <ProductCard key={item.product_id} item={item} catalog={catalog} />)}</div>{pages > 1 && <div className="pagination"><button disabled={page === 1} onClick={() => { setPage(page - 1); document.getElementById('catalog')?.scrollIntoView(); }}><ChevronLeft size={16} /> Previous</button><span>Page {page} of {pages}</span><button disabled={page >= pages} onClick={() => { setPage(page + 1); document.getElementById('catalog')?.scrollIntoView(); }}>Next <ChevronRight size={16} /></button></div>}</>}</div>
           </div></section>
       </>}
     </main><footer id="about"><div className="footer-inner wrap"><div><Logo /><p>Good tech, found simply.<br />A little more discovery, a lot less noise.</p></div><div className="footer-note"><span>MADE FOR CURIOUS MINDS <span>✳</span></span><p>Explore real electronics and real customer reviews. Sentiment is model-predicted and may be imperfect.</p></div><div className="footer-links"><a href="#catalog">Explore products</a><a href="#home">Back to top ↑</a></div></div><div className="footer-bottom wrap"><span>© RELEVIA</span><span>THOUGHTFULLY FOUND, JUST FOR YOU.</span></div></footer>

@@ -1,0 +1,8 @@
+[workspace]
+name = "relevia"
+version = "0.1.0"
+channels = []
+platforms = ["win-64", "linux-64", "linux-aarch64", "osx-64", "osx-arm64"]
+
+[tasks]
+main = "node scripts/dev.mjs"
