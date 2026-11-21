@@ -106,6 +106,31 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()['items']), 5)
 
+    def test_natural_language_constraints(self):
+        response = self.client.get('/api/search/text', params={'q': '100 dollardan ucuz simsiz qulaqlıq'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['items']), 5)
+        self.assertTrue(all(item['price'] < 100 for item in response.json()['items']))
+        self.assertTrue(any(item['category'] == 'Headphones & Earbuds' for item in response.json()['items']))
+        response = self.client.get('/api/search/text', params={'q': 'mouse under $100 with 4+ stars', 'max_price': 75})
+        self.assertEqual(response.status_code, 200)
+        self.assertGreater(len(response.json()['items']), 0)
+        for item in response.json()['items']:
+            self.assertLess(item['price'], 100)
+            self.assertLessEqual(item['price'], 75)
+            self.assertGreaterEqual(app.state.products[item['product_id']]['average_rating'], 4)
+        self.assertEqual(self.client.get('/api/search/text', params={
+            'q': 'mouse under $100', 'min_price': 150}).json()['items'], [])
+        response = self.client.get('/api/search/text', params={'q': 'Find laptops under $500'})
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['items'])
+        self.assertTrue(all(item['price'] < 500 for item in response.json()['items']))
+        for query in ('wireless headphones', 'Mənə dərs üçün münasib qiymətə laptop tap',
+                      'Gaming mouse with good ratings'):
+            response = self.client.get('/api/search/text', params={'q': query})
+            self.assertEqual(response.status_code, 200)
+            self.assertTrue(response.json()['items'])
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -4,13 +4,15 @@ import json
 import math
 import sys
 
+from backend.query_understanding import understand_query
+
 class UnifiedSearch:
     def __init__(self):
         self.text_search = None
         self.image_search = None
 
     @staticmethod
-    def filter_results(results, category=None, min_price=None, max_price=None, limit=5):
+    def filter_results(results, category=None, min_price=None, max_price=None, limit=5, min_rating=None):
         if limit < 1:
             raise ValueError('Limit must be positive')
         if category is not None and not category.strip():
@@ -32,6 +34,9 @@ class UnifiedSearch:
                 continue
             if min_price is not None and price < min_price or max_price is not None and price > max_price:
                 continue
+            rating = product.get('average_rating')
+            if min_rating is not None and (rating is None or not math.isfinite(rating) or rating < min_rating):
+                continue
             filtered.append({
                 'product_id': product['parent_asin'], 'title': product['title'],
                 'price': price, 'category': product['main_category'],
@@ -45,13 +50,20 @@ class UnifiedSearch:
     def text(self, query, category=None, min_price=None, max_price=None, limit=5):
         if not query.strip():
             raise ValueError('Text query must not be empty')
+        parsed = understand_query(query)
+        if parsed['min_price'] is not None:
+            min_price = max(min_price, parsed['min_price']) if min_price is not None else parsed['min_price']
+        if parsed['max_price'] is not None:
+            max_price = min(max_price, parsed['max_price']) if max_price is not None else parsed['max_price']
+        if max_price is not None and (max_price < 0 or min_price is not None and min_price > max_price):
+            return []
         if self.text_search is None:
             from backend.search import ProductSearch
             self.text_search = ProductSearch()
         search = self.text_search
         products = {product['parent_asin']: product for product in search.products}
-        lexical = search.keyword(query, len(products))
-        semantic = search.semantic(query, len(products))
+        lexical = search.keyword(parsed['text'], len(products))
+        semantic = search.semantic(parsed['text'], len(products))
         keyword_ranks = {result['parent_asin']: rank for rank, result in enumerate(lexical, 1)}
         results = []
         for rank, result in enumerate(semantic, 1):
@@ -63,7 +75,7 @@ class UnifiedSearch:
                        f'BM25 keyword rank {keyword_rank}' if keyword_rank else 'No BM25 token match']
             results.append({'product': products[product_id], 'score': score, 'reasons': reasons})
         results.sort(key=lambda result: (-result['score'], result['product']['parent_asin']))
-        return self.filter_results(results, category, min_price, max_price, limit)
+        return self.filter_results(results, category, min_price, max_price, limit, parsed['min_rating'])
 
     def image(self, path, category=None, min_price=None, max_price=None, limit=5):
         if self.image_search is None:

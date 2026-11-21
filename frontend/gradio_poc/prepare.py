@@ -15,7 +15,7 @@ def copy_file(source, target):
 def main():
     for name in ('app.py', 'README.md', 'requirements.txt'):
         copy_file(SOURCE / name, TARGET / name)
-    for name in ('api.py', 'image_search.py', 'recommend.py', 'search.py', 'sentiment.py', 'unified_search.py'):
+    for name in ('api.py', 'image_search.py', 'recommend.py', 'search.py', 'sentiment.py', 'unified_search.py', 'query_understanding.py'):
         copy_file(ROOT / 'backend' / name, TARGET / 'backend' / name)
     for name in ('products.parquet', 'reviews.parquet', 'review_sentiment.parquet', 'product_sentiment.parquet'):
         copy_file(ROOT / 'data' / name, TARGET / 'data' / name)
