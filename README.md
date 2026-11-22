@@ -1,144 +1,78 @@
-# Relevia — Phase 1: Data Preparation
+# Relevia — AI-Powered Product Search & Recommendation
 
-This pipeline streams the original [Amazon Reviews 2023 Electronics metadata and reviews](https://huggingface.co/datasets/McAuley-Lab/Amazon-Reviews-2023) and joins records by `parent_asin`. It produces product and review Parquet files and one local WebP image per selected product. It does not build models or serve an application.
+Relevia is an electronics product search and recommendation platform built using NLP, Computer Vision, and Machine Learning. Users can search for products using text or images, explore similar items, and analyze customer reviews.
 
-## Run locally
+**[Live Demo](https://shfatime-relevia.hf.space)**
 
-Python 3.10 or later is recommended. From the repository root:
+## Features
 
-```powershell
-python -m venv .venv
-.venv\Scripts\python -m pip install -r requirements.txt
-.venv\Scripts\python scripts\prepare.py --size 1000
-.venv\Scripts\python scripts\validate.py
-```
+- **Hybrid Text Search:** Combines BM25 and multilingual E5 embeddings using Reciprocal Rank Fusion (RRF).
+- **Natural Language Search:** Supports English and basic Azerbaijani queries, including price and rating constraints, without an external LLM API.
+- **Visual Search:** Uses CLIP embeddings and FAISS to retrieve visually similar products.
+- **Recommendation System:** Content-based recommendations combining text similarity, image similarity, category relevance, and sentiment.
+- **Sentiment Analysis:** Uses a pretrained DistilBERT model to classify customer reviews as positive, neutral, or negative.
+- **Product Filtering:** Search by category, price, and other available filters.
 
-On macOS/Linux or Google Colab, use `python -m venv .venv` followed by `.venv/bin/python -m pip install -r requirements.txt` and `.venv/bin/python scripts/prepare.py --size 1000`. In Colab, installing `requirements.txt` into the notebook environment and calling the script with `!python` also works.
+## Dataset
 
-The original uncompressed files are approximately 5.2 GB of metadata and 22.6 GB of reviews. They are streamed, not stored as complete downloads. Defaults inspect the first 200,000 metadata rows and stream reviews until the source ends or at least twice the requested number of candidates have five reviews (checked every 100,000 records). Use `--metadata-limit 0` for all metadata or `--review-limit N` to bound a trial. `--candidates-per-category` controls the maximum saved candidate pool for each source category. The source order is not random, so limited runs are not representative samples. The script may produce fewer products than requested when the source sample, filtering, review coverage, or image availability is insufficient.
+Source: [Amazon Reviews 2023 — Electronics](https://huggingface.co/datasets/McAuley-Lab/Amazon-Reviews-2023)
 
-Candidates require valid IDs and titles, positive numeric prices, technical-looking feature text, and source taxonomy paths. The third level of the source Electronics taxonomy is retained as `original_category` (and `category` for compatibility); `main_category` groups related observed categories using the mapping in `scripts/prepare.py`. Unknown categories are skipped until explicitly mapped. Accessory and other ambiguous paths are excluded. Conservative text filters reject service, warranty, promotional and replacement listings; automated filters are imperfect and do not establish that every remaining listing is a physical electronics product. Selection starts with a cap of 10% of the requested size per original category, increasing it only when needed to use available eligible candidates. Images must download and decode before selection. Ratings and review text come directly from the source; up to 10 reviews are retained per product, with observed rating values represented first among the first 30 matching nonempty reviews. This preserves available diversity within that bounded pool, not necessarily the full source history. Empty descriptions or missing brands and aggregate ratings remain missing rather than being invented.
+- **1,120 products** across 12 main categories
+- **9,748 customer reviews**
+- Product metadata, specifications, prices, ratings, and images
 
-`data/progress.sqlite` caches completed metadata and review stages. Existing products, reviews and images are preserved when extending the selection; requesting fewer products than already exist stops with an error. Interrupted source stages restart their stream. Cache settings must match the original run: for the current local cache use `--metadata-limit 100000 --review-limit 3000000`. Changing stream limits or candidate caps requires a fresh progress database and a new scan. Output includes `data/products.parquet`, `data/reviews.parquet`, and `data/images/`. The validator reports both category distributions, ratings, missing values, image integrity, and disk usage; when the cache exists it also checks reviews against the original cached records. Use `scripts/validate.py --expected-size 1000` to require the requested count. Dataset terms, provenance, and citation details are on the dataset card; check them before redistribution or downstream use.
+The dataset was cleaned, filtered, and processed into Parquet files. Product images were stored locally in WebP format.
 
-## Phase 2A: text search
+## Tech Stack
 
-After installing the updated requirements, compare the two methods with:
+| Component | Technologies |
+|---|---|
+| Data Processing | Python, Pandas, Parquet |
+| Text Search | BM25, multilingual E5, FAISS, RRF |
+| Image Search | CLIP ViT-B/32, FAISS |
+| Sentiment Analysis | DistilBERT |
+| Recommendation | Content-based Hybrid Ranking |
+| Backend | FastAPI |
+| Frontend | React, Vite |
+| Deployment | Hugging Face Spaces, Gradio Server |
 
-```powershell
-.venv\Scripts\python -X utf8 backend\search.py "wireless bluetooth headphones"
-.venv\Scripts\python -X utf8 backend\search.py "simsiz bluetooth qulaqlıq" --top 5
-.venv\Scripts\python -X utf8 -m backend.validate_search
-```
+## How It Works
 
-Use `.venv/bin/python` on macOS/Linux. The first search downloads the pinned [multilingual E5 small model](https://huggingface.co/intfloat/multilingual-e5-small) and computes normalized 384-dimensional embeddings on CPU in batches. Product text combines title, brand, main and original category, source categories, technical features, and available descriptions. E5 inputs are truncated at 256 tokens; the categories and features precede descriptions to keep product-identifying fields near the start. Queries use `query: ` and products use `passage: `, as required by the model.
+1. Product metadata and reviews are preprocessed from the Amazon dataset.
+2. E5 and CLIP generate text and image embeddings, stored in FAISS indexes.
+3. User queries are processed and matched against the product catalog.
+4. Search results are ranked and filtered using the available product metadata.
+5. Users can view recommendations and sentiment summaries for individual products.
 
-BM25 uses case-folded Unicode word tokens and returns only products with matching terms. Semantic search uses a FAISS inner-product index over normalized vectors, so its scores are cosine similarities. Scores from the two methods have different scales and should not be compared directly. Azerbaijani queries work without a translation service, although the predominantly English catalog, multilingual model coverage, and absence of product-specific training can produce weak cross-language matches; BM25 needs shared words or model names.
+The deployed application runs E5 and CLIP inference on CPU and reuses precomputed indexes and sentiment predictions.
 
-The model is cached under `.cache/huggingface` and vectors, FAISS index, and ordered product-ID manifest under `.cache/text_search`; `.cache/` is Git-ignored. A dataset hash, model revision, text configuration, and cache-file checksums control reuse. Changing these rebuilds the embeddings and index automatically. Existing Phase 1 artifacts are read only. The CLI setup time includes any model download and index build, and its first semantic query also loads the model; warm-query timing is reported by the validation command.
+## Run Locally
 
-## Phase 2B: visual search
+Install the Python dependencies, frontend packages, and Pixi. Prepare the required datasets and model caches, then run:
 
-After installing the updated requirements, search by an existing product image or an external image:
-
-```powershell
-.venv\Scripts\python -X utf8 backend\image_search.py data\images\B06XYHDX83.webp --top 5
-.venv\Scripts\python -X utf8 backend\image_search.py C:\path\to\photo.jpg
-.venv\Scripts\python -X utf8 -m backend.validate_image_search
-```
-
-The first run downloads the pinned [CLIP ViT-B/32 model](https://huggingface.co/openai/clip-vit-base-patch32) and computes normalized 512-dimensional image vectors in batches. CUDA is used when available in the installed PyTorch build; otherwise inference runs on CPU. The separate `.cache/image_search` directory contains the vectors, ordered product-ID and image-hash manifest, and FAISS inner-product index. Unchanged image vectors are reused; changed images are re-encoded and a changed index is rebuilt. Model/configuration changes invalidate the vector cache. The model and indexes are Git-ignored.
-
-Searching a catalog image excludes that product's resolved image path from the results. An external file, including a copy of a catalog image, is treated as an external query. Similarity is visual cosine similarity, not a guarantee that items have matching specifications or functions; results need task-specific evaluation. Phase 1 data and the Phase 2A text-search index are not modified.
-
-## Phase 3: review sentiment
-
-```powershell
-.venv\Scripts\python -X utf8 backend\sentiment.py run --batch-size 32
-.venv\Scripts\python -X utf8 backend\sentiment.py product B06XYHDX83
-.venv\Scripts\python -X utf8 backend\sentiment.py validate
-```
-
-The default is the pinned three-class `MilindSingh316/distilbert-clothing-review-sentiment` model, applied to review text with a 128-token limit. It selects CUDA when the installed PyTorch supports it, otherwise CPU. Predictions are checkpointed in `.cache/sentiment_product_comparison` and reused when the review file and model configuration are unchanged. Generated `data/review_sentiment.parquet` and `data/product_sentiment.parquet` are Git-ignored. The original tweet-trained model's results remain in `data/review_sentiment_tweet_baseline.parquet` and `data/product_sentiment_tweet_baseline.parquet`; its cache remains in `.cache/sentiment`. If the ignored baseline datasets are absent, recreate them with `python backend/sentiment.py run --baseline` using the virtual environment; this leaves the default datasets and saved evaluation reports unchanged. Evaluation artifacts under `reports/sentiment/` are intended to be tracked and grouped into `baseline`, `final`, `comparison`, and `manual`.
-
-Review IDs are SHA-256 hashes of the complete source row plus an occurrence number for identical rows; the source contains no review-ID field. Product summaries include counts, percentages, and mean observed review rating. On the 8,662 reviews, the selected model reached 76.36% agreement with star-derived weak labels, macro F1 of 0.626, and Neutral F1 of 0.306 (Neutral precision 22.7%, recall 47.0%). Against 45 AI-generated reference labels it reached 64.44% agreement and macro F1 0.549; those labels are not independent human ground truth, and the sample is small and enriched for model disagreements. Star-derived labels are also imperfect: mixed sentiment can occur at any rating. The model was trained on clothing reviews rather than electronics, longer texts are truncated, and confidence is not necessarily calibrated. Independently human-labeled, representative reviews are needed to assess sentiment quality. See `reports/sentiment/comparison/sentiment_model_comparison.md`, `reports/sentiment/manual/manual_review_evaluation.md`, and `reports/sentiment/final/sentiment_final_evaluation.md`; the original tweet-trained evaluation reports are in `reports/sentiment/baseline/`.
-
-Reproduce the model comparison with `python -m backend.compare_sentiment` and the AI-label evaluation with `python scripts/evaluate_labeled_reviews.py`, using the virtual environment. The historical comparison and `run --baseline` use the Phase 6A original-data snapshots when present; they do not replace the expanded production predictions. `python -m scripts.sample_manual_reviews` recreates the fixed-seed sample only when its output does not already exist, to avoid overwriting labels. These evaluations require the ignored source, baseline, and comparison prediction datasets; regenerating missing predictions can require model downloads and CPU/GPU inference.
-
-## Phase 4A: product recommendations
-
-```powershell
-.venv\Scripts\python -X utf8 -m backend.recommend B0001G6U4S
-```
-
-The CLI recommends up to five products and accepts `--top` to change the maximum. It reuses the Phase 2 E5 and CLIP indexes and Phase 3 product sentiment summaries; the existing search loaders rebuild stale indexes as described above. Candidates must share the selected product's main category. Products in the same original source category are ranked first; if there are too few, other products in the same main category fill the remaining slots. Within each tier, matching finer source subcategories receive a small bonus, and the score combines text cosine similarity (55%), image cosine similarity (30%), category relevance (15%), and a small adjustment based on predicted sentiment. Scores are ranking scores, not probabilities or pure cosine similarities; a fallback result can have a higher score than an original-category result because the category tier takes priority. The result includes the individual similarities and reasons.
-
-Small main categories can produce fewer than five matches. Broad categories and image similarity can still group products with different functions or specifications, particularly when using the main-category fallback, so recommendations are not a guarantee of compatibility. Sentiment is based on only 5–10 selected reviews per product and a model with the limitations described above. See `reports/recommendation/` for real examples and validation details.
-
-## Phase 4B: unified search
-
-```powershell
-.venv\Scripts\python -X utf8 -m backend.unified_search --text "simsiz bluetooth qulaqlıq" --category "Headphones & Earbuds" --max-price 60
-.venv\Scripts\python -X utf8 -m backend.unified_search --image data\images\B0001G6U4S.webp --min-price 50 --max-price 200
-```
-
-Choose exactly one of `--text` or `--image`. Optional `--category` matches an entire main or original category, case-insensitively; `--min-price` and `--max-price` are inclusive, and `--top` defaults to five. Filters are applied to the full ranked catalog before limiting results. Text search combines BM25 and E5 with equal-weight reciprocal-rank fusion; keyword-unmatched products can still rank through E5. The displayed text score is a relative fusion score, while the image score is CLIP cosine similarity, so scores across modes or queries are not comparable. The CLI reuses the existing indexes and caches. Image searches exclude the query product when its catalog image path is used, as in Phase 2B.
-
-Search quality depends on the English catalog and pretrained models; Azerbaijani queries, specialized terms and image matches can return unrelated products. Categories and prices are metadata filters, not compatibility checks. See `reports/search/` for real examples and limitations.
-
-## Phase 5A: local API
-
-Install the updated requirements, then start the local server from the repository root:
-
-```powershell
-.venv\Scripts\python -m uvicorn backend.api:app --host 127.0.0.1 --port 8000
-```
-
-Open `http://127.0.0.1:8000/docs` for interactive OpenAPI documentation, or `/redoc` for the reference. Startup loads the existing data, indexes, E5 model and CLIP model once per server process; missing or stale caches follow the existing Phase 2 rebuild behavior. Images are available at the relative URLs returned in `image_url` under `/images/`.
-
-- `GET /api/categories` lists main and original categories.
-- `GET /api/products?page=1&page_size=20&category=Digital%20Cameras&min_price=50&max_price=200` lists products. Category and price filters are optional; price bounds are inclusive. Categories match a complete main or original name without regard to case.
-- `GET /api/products/{product_id}` returns a product's description, specifications, price, ratings and image URL.
-- `GET /api/search/text?q=wireless%20headphones` performs hybrid search. Optional `category`, `min_price`, `max_price` and `limit` query parameters also apply to `POST /api/search/image`, which accepts a multipart `file` field containing a decodable image of at most 10 MiB. Uploaded copies are external images, so a matching catalog product may appear in results.
-- `GET /api/products/{product_id}/recommendations` returns up to five related products.
-- `GET /api/products/{product_id}/sentiment?sentiment=positive` returns the product summary and original review text joined to the final model's predictions. The optional sentiment filter accepts `positive`, `neutral` or `negative`; the summary remains unfiltered. Review timestamps are source Unix milliseconds.
-
-Missing products return 404, invalid parameters or images return 422, and an image larger than 10 MiB returns 413. Empty matches return an empty list. This local API has no authentication; search, recommendation and sentiment limitations described above still apply. To run the essential endpoint checks against the existing local data and caches:
-
-```powershell
-.venv\Scripts\python -X utf8 -m unittest discover -s tests -v
-```
-
-## Phase 5B: React frontend
-
-Install Pixi, Node.js/npm, and Python once. From the repository root, create `.venv` and install `requirements.txt` as shown in Phase 1, then install the frontend packages:
-
-```powershell
+```bash
+pip install -r requirements.txt
 cd frontend
-npm.cmd install
+npm install
 cd ..
-```
-
-With the prepared `data/` files, images, sentiment summaries, and model caches available, start both servers from the repository root:
-
-```powershell
 pixi run main
 ```
 
-Open `http://127.0.0.1:5173`; the API is at `http://127.0.0.1:8000/docs`. Wait for `Application startup complete` while the models load. Press Ctrl+C in the same terminal to stop both servers. The launcher refuses a second instance or occupied ports 8000 and 5173; stop the other process and retry. Pixi runs the existing `.venv` Python and installed frontend dependencies, rather than installing another copy. On macOS/Linux use `npm` in place of `npm.cmd` and `.venv/bin/python` for setup. If model caches are missing, the existing loaders may download models or rebuild indexes.
+Frontend: `http://localhost:5173`
 
-Vite's development proxy forwards `/api` and `/images` to the backend. Run `npm.cmd run build` in `frontend` to verify the production bundle. The interface uses the existing catalog, search, recommendations and predicted sentiment; visual matches and sentiment can be imperfect, and dataset prices may be outdated. Search results show up to the top 100 matches returned by the API.
+API documentation: `http://localhost:8000/docs`
 
-The frontend shows “Preparing search…” and retries while the backend starts; search becomes available automatically when initialization finishes. If it remains unavailable for three minutes, check the backend terminal and select **Try again**. Later request errors also offer a retry.
+**Note:** The generated datasets, images, model weights, and FAISS caches are not included in the Git repository. See the scripts and backend modules for data preparation and index generation.
 
-## Phase 6A: dataset expansion
+## Limitations
 
-`scripts/expand.py` adds the targeted Electronics peripherals using the original source. It reuses eligible records from `data/progress.sqlite` and keeps its own resumable, byte-range scan checkpoints in `data/expansion.sqlite`. Metadata and review scan limits are absolute offsets in MiB (`--metadata-mib`, default 512; `--reviews-mib`, default 4096), rounded to a complete batch. A larger metadata scan after review scanning requires restarting the review stream so earlier reviews for newly discovered candidates are not missed; already cached reviews are retained.
+- Azerbaijani search is supported through a limited terminology dictionary and multilingual embeddings; some queries may return less relevant results.
+- Visual similarity does not guarantee matching product specifications.
+- Sentiment predictions are based on a pretrained model and may contain errors.
+- Product information and prices come from a historical dataset, not live shopping APIs.
 
-Use `--scan-only` to collect candidates and reviews, `--prepare-only` to download images and create the ignored `data/expansion_selection.json`, and `--commit-prepared` to stage and write the reviewed selection. The existing Arrow schemas and original rows are checked before replacement; pre-expansion Parquet backups are kept under `data/`. `scripts/validate.py` checks review provenance against both caches.
+## Links
 
-## Phase 6B: expanded catalog artifacts
+**Live Demo:** https://shfatime-relevia.hf.space
 
-The local artifacts cover 1,120 products and 9,748 reviews. The selected sentiment model, multilingual E5 text encoder, and CLIP image encoder are unchanged. Sentiment predictions and E5 vectors from the original catalog are reused when the preserved Phase 6A source snapshots and cache fingerprints match; CLIP vectors are reused by product ID and image hash. Both FAISS indexes are rebuilt for the current catalog. Generated artifacts and model caches remain Git-ignored.
-
-The updated sentiment evaluation is in `reports/sentiment/expanded/`; the original 8,662-review reports remain in `reports/sentiment/final/`. On the expanded set, agreement with star-derived weak labels is 76.15%, macro F1 is 0.625, and neutral F1 is 0.307. These are comparisons to imperfect star-derived labels, not independently verified accuracy. The model's clothing-review training domain, ambiguous reviews, and truncation still limit its reliability. See `reports/phase6b/evaluation.md` for expanded search, recommendation, and integration checks.
+**GitHub:** https://github.com/shfatime1/Relevia
