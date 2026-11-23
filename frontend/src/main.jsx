@@ -90,6 +90,10 @@ function App() {
       controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 5000);
       try {
+        if (import.meta.env.DEV) {
+          const probe = await fetch('/__backend_ready', { signal: controller.signal, cache: 'no-store' });
+          if (!probe.ok || !(await probe.json()).ready) throw new Error('Backend is starting');
+        }
         const data = await api('/api/categories', { signal: controller.signal });
         if (!cancelled) { setCategories(data.main_categories); setReadiness('ready'); }
       } catch {
