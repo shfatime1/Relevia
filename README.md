@@ -48,19 +48,21 @@ The deployed application runs E5 and CLIP inference on CPU and reuses precompute
 
 ## Run Locally
 
-Install the Python dependencies, frontend packages, and Pixi. Prepare the required datasets and model caches, then run:
+Install Pixi and prepare the required datasets and model caches, then run:
 
 ```bash
-pip install -r requirements.txt
-cd frontend
-npm install
-cd ..
+pixi install
+pixi run setup-frontend
 pixi run main
 ```
 
 Frontend: `http://localhost:5173`
 
 API documentation: `http://localhost:8000/docs`
+
+Press Ctrl+C to stop both servers. To run them separately, use `pixi run backend` and `pixi run frontend`. Pixi manages Python and Node.js; `requirements.txt` remains available for Hugging Face deployment. When changing Python dependencies, keep its constraints aligned with `pixi.toml`.
+
+The Pixi lockfile targets Windows x64, Linux x64/ARM64, and Apple Silicon. Intel macOS is excluded because current PyTorch releases do not provide compatible wheels.
 
 **Note:** The generated datasets, images, model weights, and FAISS caches are not included in the Git repository. See the scripts and backend modules for data preparation and index generation.
 
